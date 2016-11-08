@@ -22,6 +22,8 @@ else
     var loginProviders = SignInManager.GetExternalAuthenticationSchemes().ToList();
     var provider = loginProviders[0];
     <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <ul class="nav navbar-nav navbar-right">         
+            <li><button type="submit" style="border:none;background:none;" name="provider" value="@provider.AuthenticationScheme"><img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_01.png" width="180" height="35"></button></li>
         </ul>
     </form>
 }
