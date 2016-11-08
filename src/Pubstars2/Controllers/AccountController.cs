@@ -94,7 +94,7 @@ namespace Pubstars2.Controllers
             {
                 // If the user does not have an account, then ask the user to create an account.
                 ViewData["ReturnUrl"] = returnUrl;
-                ViewData["LoginProvider"] = info.LoginProvider;
+                ViewData["LoginProvider"] = info.LoginProvider;                
                 var username = info.Principal.FindFirstValue(ClaimTypes.Email);
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Username = username });
             }

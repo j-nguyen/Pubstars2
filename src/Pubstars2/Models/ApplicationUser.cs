@@ -8,5 +8,6 @@ namespace Pubstars2.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public string steamId { get; set; }
     }
 }
