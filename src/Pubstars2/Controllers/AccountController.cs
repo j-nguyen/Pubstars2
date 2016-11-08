@@ -115,7 +115,7 @@ namespace Pubstars2.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Username };
+                var user = new ApplicationUser { UserName = model.Username, psPassword = model.Password };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
