@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "exports": {
+    "PubstarsDtos/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.5",
+      "compile": {
+        "bin/Debug/PubstarsDtos.dll": {}
+      },
+      "runtime": {
+        "bin/Debug/PubstarsDtos.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/PubstarsDtos.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

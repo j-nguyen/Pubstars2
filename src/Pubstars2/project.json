@@ -41,7 +41,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "AspNet.Security.OpenId.Steam": "1.0.0-beta1-final"
+    "AspNet.Security.OpenId.Steam": "1.0.0-beta1-final",
+    "SkillsCore": "1.0.0-*"
   },
 
   "tools": {
@@ -63,7 +64,12 @@
       "imports": [
         "dotnet5.6",
         "portable-net45+win8"
-      ]
+      ],
+      "dependencies": {
+        "PubstarsDtos": {
+          "target": "project"
+        }
+      }
     }
   },
 
