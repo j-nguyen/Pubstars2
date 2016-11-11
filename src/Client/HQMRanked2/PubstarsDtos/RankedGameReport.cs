@@ -12,8 +12,7 @@ namespace PubstarsDtos
         public int RedScore { get; set; }
         public int BlueScore { get; set; }
         public string WinningTeam { get; set; }
-        public PlayerStatLine MVP { get; set; }
-        public double MatchQuality { get; set; }
+        public DateTime Date { get; set; }
     }
 
   

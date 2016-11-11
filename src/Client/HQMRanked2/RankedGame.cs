@@ -16,7 +16,7 @@ namespace HQMRanked
 
         public bool StartingGame = false;
 
-        public bool IsMercy = false;
+        public bool IsEndingDueToMercyRule = false;
 
         List<string> RedTeam = new List<string>();
         List<string> BlueTeam = new List<string>();
@@ -52,7 +52,7 @@ namespace HQMRanked
 
         public void StartGame()
         {
-            IsMercy = false;
+            IsEndingDueToMercyRule = false;
             if(m_LastGameReport != null)
             {
                 SetPlayedLastGame(m_LastGameReport.PlayerStats);
@@ -68,29 +68,22 @@ namespace HQMRanked
             Chat.SendMessage("Game over. Recording stats...");
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);
-            PlayerStatLine MVP = stats[0];
-            foreach (PlayerStatLine p in stats)
-            {
-                if (p.Goals + p.Assists > MVP.Goals + MVP.Assists)
-                {
-                    MVP = p;
-                }
-            }
+            List<PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);           
 
             m_LastGameReport = new RankedGameReport()
             {
                 RedScore = redScore,
                 BlueScore = blueScore,
                 WinningTeam = redScore > blueScore ? "Red" : "Blue",
-                PlayerStats = stats            
+                PlayerStats = stats,
+                Date = DateTime.UtcNow       
             };
 
             if(record)
             {
                 try
                 {
-                    await UserSaveData.PostGameResult(m_LastGameReport);//send result to server
+                    RemoteApi.SendGameResult(m_LastGameReport);//send result to server
                 }
                 catch (Exception ex)
                 {
@@ -239,7 +232,7 @@ namespace HQMRanked
             double result = 0;
             foreach(string p in list)
             {
-                result += UserSaveData.AllUserData[p].Rating;
+                result += RemoteApi.AllUserData[p].Rating;
             }
             return result;
         }      

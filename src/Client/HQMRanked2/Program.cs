@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using HQMEditorDedicated;
 using System.Threading.Tasks;
+using PubstarsDtos;
 
 namespace HQMRanked
 {
@@ -13,18 +14,18 @@ namespace HQMRanked
         public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
 
         public static async Task MainAsync(string[] args)
-        {
+        {      
 
             Console.WriteLine("Looking for server...");
             while (!MemoryEditor.Init()) { }
             Console.WriteLine("Server found.");
 
-            CommandListener cmdListener = new CommandListener(Chat.MessageCount);
-            Chat.RecordCommandSource();
-
             Console.WriteLine("Reading user data...");
-            UserSaveData.AllUserData = await UserSaveData.Init();
+            RemoteApi.GetUserData();
             Console.WriteLine("done.");
+
+            CommandListener cmdListener = new CommandListener(Chat.MessageCount);
+            Chat.RecordCommandSource();            
 
             RankedGame game = new RankedGame();
             Chat.FlushLastCommand();
@@ -46,9 +47,9 @@ namespace HQMRanked
                     {
                         await game.EndGame(true);
                     }
-                    if (CheckMercy() && !game.IsMercy)
+                    if (CheckMercy() && !game.IsEndingDueToMercyRule)
                     {
-                        game.IsMercy = true;
+                        game.IsEndingDueToMercyRule = true;
                         Chat.SendMessage("---------------------------------------------------");
                         Chat.SendMessage("  Game is ending due to mercy rule.");
                         Chat.SendMessage("---------------------------------------------------");

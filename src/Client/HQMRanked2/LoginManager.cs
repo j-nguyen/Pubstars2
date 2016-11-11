@@ -33,7 +33,7 @@ namespace HQMRanked
         static bool Login(Player player, string password)
         {
             UserData u;
-            if(UserSaveData.AllUserData.TryGetValue(player.Name, out u))
+            if(RemoteApi.AllUserData.TryGetValue(player.Name, out u))
             {
                 RankedPlayer rankedPlayer = new RankedPlayer(player.Name, player.IPAddress, player, u);
                 if(LoggedInPlayers.FirstOrDefault(x=> x.Name == player.Name) != null)
