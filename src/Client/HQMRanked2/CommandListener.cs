@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HQMEditorDedicated;
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     public class CommandListener
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using HQMEditorDedicated;
 using PubstarsDtos;
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     class LoginManager
     {      

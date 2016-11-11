@@ -7,14 +7,39 @@ using HQMEditorDedicated;
 using System.Threading.Tasks;
 using PubstarsDtos;
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     class Program
     {
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
+        public static void Main(string[] args)
+        {
+            RankedGameReport g = new RankedGameReport()
+            {
+                RedScore = 10,
+                BlueScore = 11,
+                WinningTeam = "Blue",
+                Date = DateTime.UtcNow,
+                ServerName = "testServer"
+            };
+          
+            for (int i = 0; i < 10; i++)
+            {
+                g.PlayerStats.Add(new RankedGameReport.PlayerStatLine()
+                {
+                    Name = "player"+i,
+                    Goals = i,
+                    Assists = i,
+                    Team = i%2==0? "Red" : "Blue",
+                    Leaver = false
 
-        public static async Task MainAsync(string[] args)
-        {      
+                });
+            }
+
+            
+
+
+            RemoteApi.SendGameResult(g);
+            
 
             Console.WriteLine("Looking for server...");
             while (!MemoryEditor.Init()) { }
@@ -45,7 +70,7 @@ namespace HQMRanked
                 {
                     if (GameInfo.IsGameOver)
                     {
-                        await game.EndGame(true);
+                        game.EndGame(true);
                     }
                     if (CheckMercy() && !game.IsEndingDueToMercyRule)
                     {
@@ -82,7 +107,7 @@ namespace HQMRanked
                     }
                     else if (cmd.Cmd == "end" && cmd.Sender.IsAdmin)
                     {
-                        await game.EndGame(false);
+                        game.EndGame(false);
                     }
                     else if (cmd.Cmd == "info" && (!game.InProgress || game.StartingGame))
                     {

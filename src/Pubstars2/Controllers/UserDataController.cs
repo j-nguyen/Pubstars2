@@ -28,6 +28,7 @@ namespace Pubstars2.Controllers
         public IActionResult GetUserData()
         {
             Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
+           
             foreach (ApplicationUser user in _userManager.Users)
             {
                 userData[user.UserName] = new UserData()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     public static class Util
     {

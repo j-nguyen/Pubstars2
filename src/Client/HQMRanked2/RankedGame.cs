@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using PubstarsDtos;
 
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     public class RankedGame
     {
@@ -63,12 +63,12 @@ namespace HQMRanked
             InProgress = true;
         }
 
-        public async Task EndGame(bool record)
+        public void EndGame(bool record)
         {
             Chat.SendMessage("Game over. Recording stats...");
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);           
+            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);           
 
             m_LastGameReport = new RankedGameReport()
             {
@@ -255,10 +255,10 @@ namespace HQMRanked
         }
        
 
-        private void SetPlayedLastGame(List<PlayerStatLine> lastGameStats)
+        private void SetPlayedLastGame(ICollection<RankedGameReport.PlayerStatLine> lastGameStats)
         {            
             List<string> names = new List<string>();
-            foreach(PlayerStatLine sl in lastGameStats)
+            foreach(RankedGameReport.PlayerStatLine sl in lastGameStats)
             {
                 names.Add(sl.Name);
             }
@@ -269,12 +269,12 @@ namespace HQMRanked
             }                      
         }
 
-        private List<PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
+        private List<RankedGameReport.PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
         {
-            List<PlayerStatLine> stats = new List<PlayerStatLine>();
+            List<RankedGameReport.PlayerStatLine> stats = new List<RankedGameReport.PlayerStatLine>();
             foreach (string s in RedTeam.Concat(BlueTeam))
             {
-                PlayerStatLine player = new PlayerStatLine();
+                RankedGameReport.PlayerStatLine player = new RankedGameReport.PlayerStatLine();
                 player.Name = s;
                 player.Team = RedTeam.Contains(s) ? "Red" : "Blue";
 

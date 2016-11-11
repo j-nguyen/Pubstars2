@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace PubstarsDtos
+namespace Pubstars2.Models.PubstarsGame
 {
-    public class PlayerStatLine
+    public class PubstarsPlayer
     {
+        [Key]
         public string Name { get; set; }
-        public string Team { get; set; }
+        public HqmTeam team { get; set; }
         public int Goals { get; set; }
         public int Assists { get; set; }
-        public bool Leaver { get; set; }
     }
 }

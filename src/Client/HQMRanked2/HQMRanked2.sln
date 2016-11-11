@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQMRanked2", "HQMRanked2.csproj", "{E3397C93-73E5-40A7-A399-AD90013F29EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubstarsClient", "PubstarsClient.csproj", "{E3397C93-73E5-40A7-A399-AD90013F29EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQMEditorDedicated", "..\HQMEditorDedicated\HQMEditorDedicated\HQMEditorDedicated.csproj", "{AA3CF9DB-4D4E-4298-9394-F21E0A87E03D}"
 EndProject

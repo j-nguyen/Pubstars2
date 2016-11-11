@@ -62,7 +62,6 @@
     <Compile Include="LoginManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PubstarsDtos\PlayerStatLine.cs" />
     <Compile Include="PubstarsDtos\RankedGameReport.cs" />
     <Compile Include="PubstarsDtos\UserData.cs" />
     <Compile Include="RankedGame.cs" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Models;
+using Pubstars2.Models.PubstarsGame;
 
 namespace Pubstars2.Data
 {
@@ -18,5 +19,7 @@ namespace Pubstars2.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<PubstarsGame> Games { get; set; }
     }
 }

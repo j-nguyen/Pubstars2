@@ -1,4 +1,5 @@
-﻿using PubstarsDtos;
+﻿using Newtonsoft.Json;
+using PubstarsDtos;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace HQMRanked
+namespace PubstarsClient
 {
     public class RemoteApi
     {
@@ -31,13 +32,14 @@ namespace HQMRanked
         /// <summary>
         /// Sends the game result to the server
         /// </summary>
-        /// <param name="result"></param>
+        /// <param name="gameReport"></param>
         /// <returns>Updated user data</returns>
-        public static bool SendGameResult(RankedGameReport result)
+        public static bool SendGameResult(RankedGameReport gameReport)
         {
             RestClient client = new RestClient(k_Url+ "GameReports/PostGameResult");
             var request = new RestRequest(Method.POST);
-            request.AddObject(result);
+            var json = JsonConvert.SerializeObject(gameReport);
+            request.AddParameter("application/json", json, ParameterType.RequestBody);
             var response = client.Execute(request);
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
