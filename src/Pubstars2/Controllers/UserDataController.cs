@@ -27,17 +27,17 @@ namespace Pubstars2.Controllers
         [HttpGet]
         public IActionResult GetUserData()
         {
-            List<UserData> list = new List<UserData>();
+            Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
             foreach (ApplicationUser user in _userManager.Users)
             {
-                list.Add(new UserData()
+                userData[user.UserName] = new UserData()
                 {
                     Name = user.UserName,
                     Password = user.psPassword,
                     Rating = user.rating
-                });                    
+                };                    
             }
-            return Json(list);
+            return Json(userData);
         }
     }
 }
