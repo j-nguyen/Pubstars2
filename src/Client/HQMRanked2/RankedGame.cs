@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using HQMEditorDedicated;
-using static HQMRanked.RankedGameReport;
 using System.Threading.Tasks;
+using PubstarsDtos;
+
 
 namespace HQMRanked
 {
@@ -20,7 +21,7 @@ namespace HQMRanked
         List<string> RedTeam = new List<string>();
         List<string> BlueTeam = new List<string>();
 
-        RankedGameReport LastGameReport;
+        RankedGameReport m_LastGameReport;
         
         System.Timers.Timer _timer;
 
@@ -52,7 +53,10 @@ namespace HQMRanked
         public void StartGame()
         {
             IsMercy = false;
-            SetPlayedLastGame();
+            if(m_LastGameReport != null)
+            {
+                SetPlayedLastGame(m_LastGameReport.PlayerStats);
+            }                
             CreateTeams();
             Chat.SendMessage("---- Game Starting ----");            
             Tools.ResumeGame();
@@ -61,14 +65,32 @@ namespace HQMRanked
 
         public async Task EndGame(bool record)
         {
-            Chat.SendMessage("Game over. Recording stats...");    
-            
-            LastGameReport = new RankedGameReport(RedTeam, BlueTeam, GameInfo.RedScore, GameInfo.BlueScore, CreateStatLines(RedTeam, BlueTeam));
+            Chat.SendMessage("Game over. Recording stats...");
+            int redScore = GameInfo.RedScore;
+            int blueScore = GameInfo.BlueScore;
+            List<PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);
+            PlayerStatLine MVP = stats[0];
+            foreach (PlayerStatLine p in stats)
+            {
+                if (p.Goals + p.Assists > MVP.Goals + MVP.Assists)
+                {
+                    MVP = p;
+                }
+            }
+
+            m_LastGameReport = new RankedGameReport()
+            {
+                RedScore = redScore,
+                BlueScore = blueScore,
+                WinningTeam = redScore > blueScore ? "Red" : "Blue",
+                PlayerStats = stats            
+            };
+
             if(record)
             {
                 try
                 {
-                    await UserSaveData.PostGameResult(LastGameReport);//send result to server
+                    await UserSaveData.PostGameResult(m_LastGameReport);//send result to server
                 }
                 catch (Exception ex)
                 {
@@ -240,21 +262,18 @@ namespace HQMRanked
         }
        
 
-        private void SetPlayedLastGame()
-        {
-            if (LastGameReport != null)
+        private void SetPlayedLastGame(List<PlayerStatLine> lastGameStats)
+        {            
+            List<string> names = new List<string>();
+            foreach(PlayerStatLine sl in lastGameStats)
             {
-                List<string> names = new List<string>();
-                foreach(RankedGameReport.PlayerStatLine sl in LastGameReport.PlayerStats)
-                {
-                    names.Add(sl.Name);
-                }
+                names.Add(sl.Name);
+            }
 
-                foreach(RankedPlayer rp in LoginManager.LoggedInPlayers)
-                {
-                    rp.PlayedLastGame = names.Contains(rp.Name);
-                }
-            }            
+            foreach(RankedPlayer rp in LoginManager.LoggedInPlayers)
+            {
+                rp.PlayedLastGame = names.Contains(rp.Name);
+            }                      
         }
 
         private List<PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
@@ -264,7 +283,7 @@ namespace HQMRanked
             {
                 PlayerStatLine player = new PlayerStatLine();
                 player.Name = s;
-                player.Team = RedTeam.Contains(s) ? HqmTeam.Red : HqmTeam.Blue;
+                player.Team = RedTeam.Contains(s) ? "Red" : "Blue";
 
                 RankedPlayer rp = LoginManager.LoggedInPlayers.FirstOrDefault(x => x.Name == s);
                 if (rp != null && rp.Name == rp.PlayerStruct.Name && rp.PlayerStruct.InServer)

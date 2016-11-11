@@ -9,5 +9,6 @@ namespace Pubstars2.Models
     public class ApplicationUser : IdentityUser
     {
         public string psPassword { get; set; }
+        public int rating { get; set; }
     }
 }

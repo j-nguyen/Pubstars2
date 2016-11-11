@@ -65,10 +65,7 @@
         "dotnet5.6",
         "portable-net45+win8"
       ],
-      "dependencies": {
-        "PubstarsDtos": {
-          "target": "project"
-        }
+      "dependencies": {        
       }
     }
   },

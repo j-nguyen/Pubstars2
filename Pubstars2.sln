@@ -14,8 +14,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SkillsCore", "src\SkillsCor
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Pubstars2", "src\Pubstars2\Pubstars2.xproj", "{157C0FD7-845C-4C45-9279-69AB5C942945}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubstarsDtos", "src\PubstarsDtos\PubstarsDtos\PubstarsDtos.csproj", "{C57ED5A6-8713-4F63-B898-2E877E827E8C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,10 +28,6 @@ Global
 		{157C0FD7-845C-4C45-9279-69AB5C942945}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{157C0FD7-845C-4C45-9279-69AB5C942945}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{157C0FD7-845C-4C45-9279-69AB5C942945}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C57ED5A6-8713-4F63-B898-2E877E827E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C57ED5A6-8713-4F63-B898-2E877E827E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C57ED5A6-8713-4F63-B898-2E877E827E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C57ED5A6-8713-4F63-B898-2E877E827E8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +35,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A72E00BD-3E7C-4157-80C8-E04C129C583F} = {659BAAEB-6332-4AF2-B8C5-419F0CE72722}
 		{157C0FD7-845C-4C45-9279-69AB5C942945} = {659BAAEB-6332-4AF2-B8C5-419F0CE72722}
-		{C57ED5A6-8713-4F63-B898-2E877E827E8C} = {659BAAEB-6332-4AF2-B8C5-419F0CE72722}
 	EndGlobalSection
 EndGlobal
