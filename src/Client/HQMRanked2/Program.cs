@@ -21,22 +21,16 @@ namespace PubstarsClient
                 Date = DateTime.UtcNow,
                 ServerName = "testServer"
             };
-          
-            for (int i = 0; i < 10; i++)
+
+            g.PlayerStats.Add(new RankedGameReport.PlayerStatLine()
             {
-                g.PlayerStats.Add(new RankedGameReport.PlayerStatLine()
-                {
-                    Name = "player"+i,
-                    Goals = i,
-                    Assists = i,
-                    Team = i%2==0? "Red" : "Blue",
-                    Leaver = false
+                Name = "omaha",
+                Goals = 5,
+                Assists = 2,
+                Team = "Blue",
+                Leaver = false
 
-                });
-            }
-
-            
-
+            });         
 
             RemoteApi.SendGameResult(g);
             

@@ -8,8 +8,8 @@ using Pubstars2.Data;
 namespace Pubstars2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161110234720_rating")]
-    partial class rating
+    [Migration("20161112055524_catchup")]
+    partial class catchup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -177,6 +177,42 @@ namespace Pubstars2.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Pubstars2.Models.PubstarsGame.PubstarsGame", b =>
+                {
+                    b.Property<string>("gameId");
+
+                    b.Property<int>("blueScore");
+
+                    b.Property<DateTime>("date");
+
+                    b.Property<int>("redScore");
+
+                    b.HasKey("gameId");
+
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("Pubstars2.Models.PubstarsGame.PubstarsPlayer", b =>
+                {
+                    b.Property<string>("PubstarsPlayerId");
+
+                    b.Property<int>("Assists");
+
+                    b.Property<int>("Goals");
+
+                    b.Property<string>("PubstarsGamegameId");
+
+                    b.Property<int>("Team");
+
+                    b.HasKey("PubstarsPlayerId");
+
+                    b.HasIndex("PubstarsGamegameId");
+
+                    b.HasIndex("PubstarsPlayerId");
+
+                    b.ToTable("PubstarsPlayer");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -211,6 +247,18 @@ namespace Pubstars2.Migrations
                     b.HasOne("Pubstars2.Models.ApplicationUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Pubstars2.Models.PubstarsGame.PubstarsPlayer", b =>
+                {
+                    b.HasOne("Pubstars2.Models.PubstarsGame.PubstarsGame")
+                        .WithMany("players")
+                        .HasForeignKey("PubstarsGamegameId");
+
+                    b.HasOne("Pubstars2.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("PubstarsPlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

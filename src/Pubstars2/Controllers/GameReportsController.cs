@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using PubstarsDtos;
 using Pubstars2.Data;
 using Pubstars2.Models.PubstarsGame;
+using Microsoft.AspNetCore.Identity;
+using Pubstars2.Models;
 
 namespace Pubstars2.Controllers
 {
     public class GameReportsController : Controller
     {
         private ApplicationDbContext _db;
+        private UserManager<ApplicationUser> _userManager;
 
-        public GameReportsController(ApplicationDbContext db)
+        public GameReportsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -24,15 +28,18 @@ namespace Pubstars2.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostGameResult([FromBody]RankedGameReport report)
+        public async Task<IActionResult> PostGameResult([FromBody]RankedGameReport report)
         {
-            List<PubstarsPlayer> pubplayers = new List<PubstarsPlayer>();
-            foreach(RankedGameReport.PlayerStatLine p in report.PlayerStats)
+            List<PubstarsPlayer> pubplayers = new List<PubstarsPlayer>();         
+
+   
+            foreach (RankedGameReport.PlayerStatLine p in report.PlayerStats)
             {
+                ApplicationUser user = await _userManager.FindByNameAsync(p.Name);
                 PubstarsPlayer pp = new PubstarsPlayer()
                 {
-                    Name = p.Name,
-                    team = p.Team == "Red" ? HqmTeam.red : HqmTeam.blue,
+                    User = user == null ? null : user,                    
+                    Team = p.Team == "Red" ? HqmTeam.red : HqmTeam.blue,
                     Goals = p.Goals,
                     Assists = p.Assists
                 };
@@ -41,8 +48,7 @@ namespace Pubstars2.Controllers
             }
 
             PubstarsGame game = new PubstarsGame()
-            {
-                gameId = report.Date + "-" + report.ServerName,
+            {                
                 players = pubplayers,
                 redScore = report.RedScore,
                 blueScore = report.BlueScore,

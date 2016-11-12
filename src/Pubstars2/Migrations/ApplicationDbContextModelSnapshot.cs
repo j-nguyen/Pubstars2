@@ -193,7 +193,7 @@ namespace Pubstars2.Migrations
 
             modelBuilder.Entity("Pubstars2.Models.PubstarsGame.PubstarsPlayer", b =>
                 {
-                    b.Property<string>("Name");
+                    b.Property<string>("PubstarsPlayerId");
 
                     b.Property<int>("Assists");
 
@@ -201,11 +201,13 @@ namespace Pubstars2.Migrations
 
                     b.Property<string>("PubstarsGamegameId");
 
-                    b.Property<int>("team");
+                    b.Property<int>("Team");
 
-                    b.HasKey("Name");
+                    b.HasKey("PubstarsPlayerId");
 
                     b.HasIndex("PubstarsGamegameId");
+
+                    b.HasIndex("PubstarsPlayerId");
 
                     b.ToTable("PubstarsPlayer");
                 });
@@ -252,6 +254,11 @@ namespace Pubstars2.Migrations
                     b.HasOne("Pubstars2.Models.PubstarsGame.PubstarsGame")
                         .WithMany("players")
                         .HasForeignKey("PubstarsGamegameId");
+
+                    b.HasOne("Pubstars2.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("PubstarsPlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }
