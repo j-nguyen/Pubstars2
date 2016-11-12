@@ -50,7 +50,7 @@ namespace Pubstars2
 
             app.UseIdentity();
 
-            app.UseSteamAuthentication();
+            app.UseSteamAuthentication(x => x.ApplicationKey = Configuration.GetValue<string>("steamapi"));
 
             app.UseMvc(routes =>
             {

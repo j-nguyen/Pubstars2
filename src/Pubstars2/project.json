@@ -65,7 +65,7 @@
         "dotnet5.6",
         "portable-net45+win8"
       ],
-      "dependencies": {        
+      "dependencies": {
       }
     }
   },
@@ -84,6 +84,8 @@
   "publishOptions": {
     "include": [
       "wwwroot",
+      "**/*.cshtml",
+      "appsettings.json",
       "web.config"
     ]
   },
