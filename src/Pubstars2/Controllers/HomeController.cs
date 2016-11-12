@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
-using Pubstars2.Models.LeaderboardViewModels;
+using Pubstars2.Models.PubstarsViewModels;
 
 namespace Pubstars2.Controllers
 {
-   
+
     public class HomeController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -22,10 +20,10 @@ namespace Pubstars2.Controllers
         public IActionResult Index()
         {
             //fakedata
-            List<LeaderboardEntry> entries = new List<LeaderboardEntry>();
+            List<LeaderboardEntryViewModel> entries = new List<LeaderboardEntryViewModel>();
             for (int i = 0; i < 100; i++)
             {
-                entries.Add(new LeaderboardEntry()
+                entries.Add(new LeaderboardEntryViewModel()
                 {
                     name = "player " + i,
                     rating = 1000 + (20 * i),

@@ -36,7 +36,7 @@ namespace PubstarsClient
         /// <returns>Updated user data</returns>
         public static bool SendGameResult(RankedGameReport gameReport)
         {
-            RestClient client = new RestClient(k_Url+ "GameReports/PostGameResult");
+            RestClient client = new RestClient(k_Url+ "Games/PostGameResult");
             var request = new RestRequest(Method.POST);
             var json = JsonConvert.SerializeObject(gameReport);
             request.AddParameter("application/json", json, ParameterType.RequestBody);

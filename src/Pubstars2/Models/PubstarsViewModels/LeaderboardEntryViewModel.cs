@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pubstars2.Models.LeaderboardViewModels
+namespace Pubstars2.Models.PubstarsViewModels
 {
-    public class LeaderboardEntry
+    public class LeaderboardEntryViewModel
     {
         [Display(Name="Name")]
         public string name { get; set; }

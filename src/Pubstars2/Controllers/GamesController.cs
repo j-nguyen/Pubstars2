@@ -8,15 +8,16 @@ using Pubstars2.Data;
 using Pubstars2.Models.PubstarsStats;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
+using Pubstars2.Models.PubstarsViewModels;
 
 namespace Pubstars2.Controllers
 {
-    public class GameReportsController : Controller
+    public class GamesController : Controller
     {
         private ApplicationDbContext _db;
         private UserManager<ApplicationUser> _userManager;
 
-        public GameReportsController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public GamesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -24,7 +25,18 @@ namespace Pubstars2.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
+            foreach(PubstarsGame game in _db.Games)
+            {
+                //todo statlines
+                gameSummaries.Add(new GameSummaryViewModel()
+                {
+                    redScore = game.redScore,
+                    blueScore = game.blueScore,
+                    time = game.date
+                });
+            }
+            return View(gameSummaries);
         }
 
         [HttpPost]
@@ -36,9 +48,15 @@ namespace Pubstars2.Controllers
             foreach (RankedGameReport.PlayerStatLine p in report.PlayerStats)
             {
                 ApplicationUser user = await _userManager.FindByNameAsync(p.Name);
+                if(user == null)
+                {
+                    throw new InvalidOperationException("tried to report game with unregistered players.");
+                }
+
                 PubstarsPlayer pp = new PubstarsPlayer()
                 {
-                    User = user == null ? null : user,                    
+                    PubstarsPlayerId = user.Id,
+                    User = user,                    
                     Team = p.Team == "Red" ? HqmTeam.red : HqmTeam.blue,
                     Goals = p.Goals,
                     Assists = p.Assists
@@ -48,7 +66,8 @@ namespace Pubstars2.Controllers
             }
 
             PubstarsGame game = new PubstarsGame()
-            {                
+            {
+                gameId = report.ServerName + report.Date,
                 players = pubplayers,
                 redScore = report.RedScore,
                 blueScore = report.BlueScore,
