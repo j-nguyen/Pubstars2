@@ -35,7 +35,7 @@ namespace Pubstars2.Controllers
                 {
                     Name = user.UserName,
                     Password = user.psPassword,
-                    Rating = user.rating
+                    Rating = user.ratingMean
                 };                    
             }
             return Json(userData);

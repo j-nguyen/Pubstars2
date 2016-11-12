@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
+using Pubstars2.Models.PubstarsStats;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Pubstars2.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string psPassword { get; set; }
-        public int rating { get; set; }
+        public string psPassword { get; set; }        
+        public double ratingMean { get; set; }
+        public double ratingUncertainty { get; set; }
     }
 }

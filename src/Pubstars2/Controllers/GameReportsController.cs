@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PubstarsDtos;
 using Pubstars2.Data;
-using Pubstars2.Models.PubstarsGame;
+using Pubstars2.Models.PubstarsStats;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
 

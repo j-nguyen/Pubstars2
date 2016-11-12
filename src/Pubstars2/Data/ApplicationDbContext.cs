@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Models;
-using Pubstars2.Models.PubstarsGame;
+using Pubstars2.Models.PubstarsStats;
 
 namespace Pubstars2.Data
 {

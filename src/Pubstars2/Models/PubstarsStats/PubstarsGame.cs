@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pubstars2.Models.PubstarsGame
+namespace Pubstars2.Models.PubstarsStats
 {
     public class PubstarsGame
     {

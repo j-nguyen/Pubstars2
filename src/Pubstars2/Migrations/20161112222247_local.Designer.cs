@@ -8,9 +8,10 @@ using Pubstars2.Data;
 namespace Pubstars2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161112222247_local")]
+    partial class local
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -182,8 +183,6 @@ namespace Pubstars2.Migrations
                 {
                     b.Property<string>("gameId");
 
-                    b.Property<string>("PubstarsSeasonseasonName");
-
                     b.Property<int>("blueScore");
 
                     b.Property<DateTime>("date");
@@ -191,8 +190,6 @@ namespace Pubstars2.Migrations
                     b.Property<int>("redScore");
 
                     b.HasKey("gameId");
-
-                    b.HasIndex("PubstarsSeasonseasonName");
 
                     b.ToTable("Games");
                 });
@@ -266,13 +263,6 @@ namespace Pubstars2.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Pubstars2.Models.PubstarsStats.PubstarsGame", b =>
-                {
-                    b.HasOne("Pubstars2.Models.PubstarsStats.PubstarsSeason")
-                        .WithMany("games")
-                        .HasForeignKey("PubstarsSeasonseasonName");
                 });
 
             modelBuilder.Entity("Pubstars2.Models.PubstarsStats.PubstarsPlayer", b =>
