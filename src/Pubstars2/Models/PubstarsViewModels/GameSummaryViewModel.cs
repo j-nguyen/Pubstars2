@@ -17,7 +17,8 @@ namespace Pubstars2.Models.PubstarsViewModels
         [Display(Name = "Blue Score")]
         public int blueScore { get; set; }
 
-        public List<StatlineViewModel> statLines { get; set; }
+        public List<StatlineViewModel> redStatLines { get; set; }
+        public List<StatlineViewModel> blueStatLines { get; set; }
 
     }
         

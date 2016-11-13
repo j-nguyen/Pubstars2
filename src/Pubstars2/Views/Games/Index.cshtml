@@ -7,34 +7,99 @@
 <h2>Games</h2>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.redScore)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.blueScore)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.redScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.blueScore)
-            </td>         
-        </tr>
+@foreach(var game in Model)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td colspan="10" align="center">
+                    <font color="black" size="5">@Html.DisplayFor(modelitem => game.time)</font>
+                </td>
+            <tr>
+                <td colspan="5" bgcolor="#bf2222" align="center">
+                    <font color="white" size="4">Red</font>
+                </td>
+                <td colspan="5" bgcolor="#2763c4" align="center">
+                    <font color="white" size="4">Blue</font>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" align="center">
+                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.redScore)</font>
+                </td>
+                <td colspan="5" align="center">
+                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.blueScore)</font>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    NAME
+                </th>
+                <th>
+                    G
+                </th>
+                <th>
+                    A
+                </th>
+                <th>
+                    CHANGE
+                </th>
+                <th>
+                    NEW RATING
+                </th>
+                <th>
+                    NAME
+                </th>
+                <th>
+                    G
+                </th>
+                <th>
+                    A
+                </th>
+                <th>
+                    CHANGE
+                </th>
+                <th>
+                    NEW RATING
+                </th>
+            </tr>
+            @for (int j = 0; j < 5; j++) //todo: replace with player stat lines
+            {
+                <tr>
+                    <td>
+                        omaha
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        +25
+                    </td>
+                    <td>
+                        2500
+                    </td>
+                    <td>
+                        other
+                    </td>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        -25
+                    </td>
+                    <td>
+                        2500
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table><br />
 }
-    </tbody>
-</table>
