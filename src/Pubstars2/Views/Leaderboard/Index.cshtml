@@ -1,0 +1,83 @@
+@model IEnumerable<Pubstars2.Models.PubstarsViewModels.LeaderboardEntryViewModel>
+
+@{
+    ViewData["Title"] = "Leaderboard";
+}
+
+<h1 align="center">Leaderboard</h1>
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.gamesPlayed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.wins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.losses)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.winPercentage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pointsPerGame)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.points)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.goals)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.assists)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.gamesPlayed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.wins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.losses)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.winPercentage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pointsPerGame)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.points)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.goals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.assists)
+            </td>          
+        </tr>
+}
+    </tbody>
+</table>
