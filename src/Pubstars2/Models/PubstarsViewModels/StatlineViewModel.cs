@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Pubstars2.Models.PubstarsViewModels
+﻿namespace Pubstars2.Models.PubstarsViewModels
 {
     public class StatlineViewModel
     {

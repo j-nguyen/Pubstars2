@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Pubstars2.Models.MeViewModels
+﻿namespace Pubstars2.Models.MeViewModels
 {
     public class MeViewModel
     {
