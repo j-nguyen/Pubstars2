@@ -49,3 +49,20 @@ textarea {
   }
 }
 
+button > a,
+button > a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+.jumbotron {
+    /* add material-like shadow. thanks, http://raviroi.blogspot.com/2015/11/how-to-apply-shadow-in-jumbotron-using.html ! */
+    position:relative;
+    z-index: 2;
+    box-shadow: 0 8px 16px -6px black;
+}
+.jumbotron.hockey {
+    background-image: url(/images/header.png);
+    background-repeat: no-repeat;
+    background-position-x: -275px;
+    background-position-y: -174px;
+}

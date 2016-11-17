@@ -1,43 +1,40 @@
-<h1 align="center">Pubstars</h1>
+<div class="jumbotron hockey">
+    <h1>Pubstars</h1>
+    <p>Ranked Matchmaking and Stats Tracking for Hockey?</p>
+</div>
 
-<br />
-
-<p><strong>What is Pubstars?</strong></p>
-
-<p>Pubstars is a modded server running a ranked game mode for <a href="https://www.reddit.com/r/hockeyquestionmark/">Hockey?</a>, a game by <a href="https://twitter.com/crypticsea">@@crypticsea</a>. The ranking system uses <a href="https://en.wikipedia.org/wiki/TrueSkill">Microsoft's TrueSkill</a>, which is also used on Xbox Live for matchmaking. The server will calculate rankings and record player stats after every game and use those rankings to create teams for the next game. </p>
-
-<br />
-
-<p><strong>How can I play?</strong></p>
-
-<p>Sign in in with steam in the upper right hand corner and follow the instructions.</p>
-
-<p>Join the PubStars League server and login by using the following command:</p>
-
-<pre><code>/join mypassword
-</code></pre>
-
-<p>Note: <em>You have to type this command in the warmup period before every game. This is to prevent AFK people being selected for a team.</em></p>
-
-<br />
-
-<p><strong>Why won't a game start?</strong></p>
-
-<p>There is a required minimum number of players to start a game. When there are enough players logged in the server will create teams and drop everyone in. You can use</p>
-    <pre><code>/info
-</code></pre>  
-<p>to see how many players are logged in and how many the game needs to start.</p>
-
-<br />
-
-<p><strong>How can I help?</strong></p>
-
-<p>You can donate to the server directly to help offset the cost of running it. <a href="https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=pubstarsreports%40gmail.com">Donate here.</a> </p>
-
-<p>If you want to get involved on the technical side of things, email me at <a href="mailto:pubstarshqm@gmail.com">pubstarshqm@gmail.com</a></p>
-
-<br />
-
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>What is Pubstars?</h4>
+            <p>Pubstars is a modded server running a ranked game mode for <a href="https://www.reddit.com/r/hockeyquestionmark/">Hockey?</a>,
+                a game by <a href="https://twitter.com/crypticsea">@@crypticsea</a>. </p>
+            <p>The ranking system uses <a href="https://en.wikipedia.org/wiki/TrueSkill">Microsoft's TrueSkill</a>, which is
+                also used on Xbox Live for matchmaking. The server will calculate rankings and record player stats after
+                every game and use those rankings to create teams for the next game.</p>
+        </div>
+        <div class="col-sm-3">
+            <h4>How can I play?</h4>
+            <p>Sign in with Steam in the upper right hand corner and follow the instructions.</p>
+            <p>Join the PubStars League server and login by using the following command:</p>
+            <pre><code>/join mypassword</code></pre>
+            <p>Note: <em>You have to type this command in the warmup period before every game. This is to prevent AFK people being selected for a team.</em></p>
+        </div>
+        <div class="col-sm-3">
+            <h4>Why won't a game start?</h4>
+            <p>There is a required minimum number of players to start a game. When there are enough players logged in the server
+                will create teams and drop everyone in. You can use</p>
+            <pre><code>/info</code></pre>
+            <p>to see how many players are logged in and how many the game needs to start.</p>
+        </div>
+        <div class="col-sm-3">
+            <h4>How can I help?</h4>
+            <p>You can donate to the server directly to help offset the cost of running it.</p>
+            <button class="btn btn-success"><a href="https://www.nfoservers.com/donate.pl?force_recipient=1&recipient=pubstarsreports%40gmail.com">Donate here!</a></button>
+            <p>If you want to get involved on the technical side of things, email me at <a href="mailto:pubstarshqm@gmail.com">pubstarshqm@gmail.com</a></p>
+        </div>
+    </div>
+</div>
 
 <h2>Patch Notes</h2>
 
@@ -55,7 +52,8 @@
 <p><strong>V2.0.1 - 6/25/2016</strong></p>
 
 <ul>
-    <li>Server now functions as a regular server while no ranked game being played. This means it doesn't pause, and will start a new game whenever enough people log in, interrupting the current game. However it won't interrupt overtime.</li>
+    <li>Server now functions as a regular server while no ranked game being played. This means it doesn't pause, and will start
+        a new game whenever enough people log in, interrupting the current game. However it won't interrupt overtime.</li>
     <li>Fixed bug where the warmup countdown wouldn't start after choosing teams.</li>
     <li>Added a couple new admin commands.</li>
 </ul>
@@ -80,16 +78,13 @@
 
 <ul>
     <li>Players who weren't selected to play should now always be selected for the next game.</li>
-    <li>~~Teams should now each get at least one goalie if they are in the randomly selected pool. Use /setposition G to set goalie before teams are made.~~ disabled for testing</li>
+    <li>~~Teams should now each get at least one goalie if they are in the randomly selected pool. Use /setposition G to set
+        goalie before teams are made.~~ disabled for testing</li>
     <li>Added /info and /logout commands</li>
-    <li>Fixed bug that would sometimes mix up players when leaving/joining. This had an effect on a couple people's ranking im sure. If you want your rating reset let me know.</li>
-    <li>After game reports now show your <a href="http://research.microsoft.com/en-us/projects/trueskill/">rating, mean and uncertainty.</a>. You can use <a href="http://boson.research.microsoft.com/trueskill/rankcalculator.aspx">this calculator</a> to see how your ratings are affected by games. </li>
+    <li>Fixed bug that would sometimes mix up players when leaving/joining. This had an effect on a couple people's ranking im
+        sure. If you want your rating reset let me know.</li>
+    <li>After game reports now show your <a href="http://research.microsoft.com/en-us/projects/trueskill/">rating, mean and uncertainty.</a>.
+        You can use <a href="http://boson.research.microsoft.com/trueskill/rankcalculator.aspx">this calculator</a> to see
+        how your ratings are affected by games. </li>
     <li>Various changes to ranking leaderboards.</li>
 </ul>
-
-
-
-
-
-
-

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Pubstars2.Models.PubstarsStats;
-using System.Collections.Generic;
 
 namespace Pubstars2.Models
 {
