@@ -305,3 +305,4 @@ src/Pubstars2/appsettings.json
 src/Pubstars2/.vscode/
 src/Pubstars2/wwwroot/css/site.min.css
 src/Pubstars2/wwwroot/js/site.min.js
+src/Pubstars2/Migrations/
