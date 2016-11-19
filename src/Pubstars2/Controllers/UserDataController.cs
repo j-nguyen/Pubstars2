@@ -24,6 +24,7 @@ namespace Pubstars2.Controllers
             return View();
         }
 
+        //for client
         [HttpGet]
         public IActionResult GetUserData()
         {
@@ -34,8 +35,8 @@ namespace Pubstars2.Controllers
                 userData[user.UserName] = new UserData()
                 {
                     Name = user.UserName,
-                    Password = user.psPassword,
-                    Rating = user.ratingMean
+                    Password = user.PubstarsPassword,
+                    Rating = user.PlayerStats.RatingMean
                 };                    
             }
             return Json(userData);

@@ -5,17 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pubstars2.Models.PubstarsStats
+namespace Pubstars2.Models.Pubstars
 {
-    public class PubstarsPlayer
+    public class PlayerGameStats
     {
-        public string PubstarsPlayerId { get; set; }
+        public PlayerStats Player { get; set; }
 
-        [ForeignKey("PubstarsPlayerId")]
-        public virtual ApplicationUser User { get; set; }
+        [Key]
+        public Guid PlayerGameStatsId { get; set; }
 
         public HqmTeam Team { get; set; }
         public int Goals { get; set; }
         public int Assists { get; set; }
+        public double RatingMean { get; set; }
+        public double RatingUncertainty { get; set; }
     }
 }

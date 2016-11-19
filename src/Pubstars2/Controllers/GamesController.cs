@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PubstarsDtos;
 using Pubstars2.Data;
-using Pubstars2.Models.PubstarsStats;
+using Pubstars2.Models.Pubstars;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
 using Pubstars2.Models.PubstarsViewModels;
+using Moserware.Skills;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pubstars2.Controllers
 {
@@ -26,7 +28,7 @@ namespace Pubstars2.Controllers
         public IActionResult Index()
         {
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
-            foreach(PubstarsGame game in _db.Games)
+            foreach(Game game in _db.Games)
             {
                 //todo statlines
                 gameSummaries.Add(new GameSummaryViewModel()
@@ -40,44 +42,51 @@ namespace Pubstars2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostGameResult([FromBody]RankedGameReport report)
+        public IActionResult PostGameResult([FromBody]RankedGameReport report)
         {
-            List<PubstarsPlayer> pubplayers = new List<PubstarsPlayer>();         
-
-   
-            foreach (RankedGameReport.PlayerStatLine p in report.PlayerStats)
-            {
-                ApplicationUser user = await _userManager.FindByNameAsync(p.Name);
-                if(user == null)
-                {
-                    throw new InvalidOperationException("tried to report game with unregistered players.");
-                }
-
-                PubstarsPlayer pp = new PubstarsPlayer()
-                {
-                    PubstarsPlayerId = user.Id,
-                    User = user,                    
-                    Team = p.Team == "Red" ? HqmTeam.red : HqmTeam.blue,
-                    Goals = p.Goals,
-                    Assists = p.Assists
-                };
-
-                pubplayers.Add(pp);
-            }
-
-            PubstarsGame game = new PubstarsGame()
-            {
-                gameId = report.ServerName + report.Date,
-                players = pubplayers,
-                redScore = report.RedScore,
-                blueScore = report.BlueScore,
-                date = report.Date
-            };
-
+            Game game = CreatePubstarsGame(report);
+            //todo: update player stats/rating? or calculate from aggregate data          
             _db.Games.Add(game);
             _db.SaveChanges();            
             
             return Ok();
+        }       
+
+        private Game CreatePubstarsGame(RankedGameReport report)
+        {
+            List<PlayerGameStats> pubplayers = new List<PlayerGameStats>();
+
+            foreach (RankedGameReport.PlayerStatLine p in report.PlayerStats)
+            {
+                ApplicationUser user = _db.Users.Include(x => x.PlayerStats).FirstOrDefault(x => x.UserName == p.Name);
+                if (user == null)
+                {
+                    throw new InvalidOperationException("tried to report game with unregistered players.");
+                }
+
+                PlayerGameStats pp = new PlayerGameStats()
+                {
+                    Player = user.PlayerStats,
+                    Team = p.Team == "Red" ? HqmTeam.red : HqmTeam.blue,
+                    Goals = p.Goals,
+                    Assists = p.Assists,
+                    RatingMean = user.PlayerStats.RatingMean,
+                    RatingUncertainty = user.PlayerStats.RatingUncertainty,
+                };                        
+
+                pubplayers.Add(pp);
+            }
+
+            return new Game()
+            {
+                gameId = new Guid(),
+                playerStats = pubplayers,
+                redScore = report.RedScore,
+                blueScore = report.BlueScore,
+                date = report.Date
+            };            
         }
+
+        
     }
 }

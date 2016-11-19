@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Pubstars2.Models.PubstarsStats;
+using Moserware.Skills;
+using Pubstars2.Models.Pubstars;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Pubstars2.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public string psPassword { get; set; }        
-        public double ratingMean { get; set; }
-        public double ratingUncertainty { get; set; }
+        public string PubstarsPassword { get; set; }
+
+        public PlayerStats PlayerStats { get; set;}
     }
 }

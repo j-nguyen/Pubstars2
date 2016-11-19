@@ -8,7 +8,9 @@ using Pubstars2.Models.AccountViewModels;
 using Pubstars2.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Pubstars2.Models.Pubstars;
 using System.Security.Claims;
+using Moserware.Skills;
 
 namespace Pubstars2.Controllers
 {
@@ -115,7 +117,12 @@ namespace Pubstars2.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Username, psPassword = model.Password };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Username,
+                    PubstarsPassword = model.Password,
+                    PlayerStats = new PlayerStats()
+                };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
