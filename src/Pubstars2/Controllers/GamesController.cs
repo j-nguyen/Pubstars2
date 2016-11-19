@@ -27,17 +27,35 @@ namespace Pubstars2.Controllers
 
         public IActionResult Index()
         {
+            //test data
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
-            foreach(Game game in _db.Games)
+            for (int i = 0; i < 100; i++)
             {
                 //todo statlines
-                gameSummaries.Add(new GameSummaryViewModel()
+                GameSummaryViewModel g = new GameSummaryViewModel()
                 {
-                    redScore = game.redScore,
-                    blueScore = game.blueScore,
-                    time = game.date
-                });
+                    redScore = 3,
+                    blueScore = 2,
+                    time = DateTime.UtcNow
+                };
+                g.redStatLines = new List<StatlineViewModel>();
+                g.blueStatLines = new List<StatlineViewModel>();
+                for(int j = 0; j < 5; j++)
+                {
+                    StatlineViewModel slm = new StatlineViewModel()
+                    {
+                        name = "player" + j,
+                        goals = 5 - j + "",
+                        assists = j + "",
+                        ratingChange = "+25",
+                        newRating = "2500"
+                    };
+                    g.redStatLines.Add(slm);
+                    g.blueStatLines.Add(slm);
+                }
+                gameSummaries.Add(g);
             }
+            
             return View(gameSummaries);
         }
 
