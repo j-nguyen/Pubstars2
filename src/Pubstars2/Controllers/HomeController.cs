@@ -3,7 +3,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
-using Pubstars2.Models.PubstarsViewModels;
+using Pubstars2.Data;
+
 
 namespace Pubstars2.Controllers
 {

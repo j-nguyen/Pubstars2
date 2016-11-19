@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PubstarsDtos;
@@ -11,6 +10,7 @@ using Pubstars2.Models;
 using Pubstars2.Models.PubstarsViewModels;
 using Moserware.Skills;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Pubstars2.Controllers
 {
