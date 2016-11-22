@@ -18,6 +18,8 @@ namespace Pubstars2.Models.Pubstars
         [Key]
         public Guid PlayerStatsId { get; set;}
 
+        public string Name { get; set; }
+
         //below can be calculated from game history. 
         //Materialized view? - cache and update when needed
         //calculate every request?

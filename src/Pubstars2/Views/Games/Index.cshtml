@@ -69,34 +69,34 @@
             {
                 <tr>
                     <td>
-                        omaha
+                        @Html.DisplayFor(modelitem => game.redStatLines[j].name)
                     </td>
                     <td>
-                        3
+                        @Html.DisplayFor(modelitem => game.redStatLines[j].goals)
                     </td>
                     <td>
-                        1
+                        @Html.DisplayFor(modelitem => game.redStatLines[j].assists)
                     </td>
                     <td>
-                        +25
+                        @Html.DisplayFor(modelitem => game.redStatLines[j].ratingChange)
                     </td>
                     <td>
-                        2500
+                        @Html.DisplayFor(modelitem => game.redStatLines[j].newRating)
                     </td>
                     <td>
-                        other
-                    </td>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        -25
-                    </td>
-                    <td>
-                        2500
+                        @Html.DisplayFor(modelitem => game.blueStatLines[j].name)
+                    </td>                                  
+                    <td>                                   
+                        @Html.DisplayFor(modelitem => game.blueStatLines[j].goals)
+                    </td>                                  
+                    <td>                                   
+                        @Html.DisplayFor(modelitem => game.blueStatLines[j].assists)
+                    </td>                                  
+                    <td>                                   
+                        @Html.DisplayFor(modelitem => game.blueStatLines[j].ratingChange)
+                    </td>                                  
+                    <td>                                   
+                        @Html.DisplayFor(modelitem => game.blueStatLines[j].newRating)
                     </td>
                 </tr>
             }

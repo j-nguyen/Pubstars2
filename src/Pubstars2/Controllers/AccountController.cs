@@ -118,8 +118,9 @@ namespace Pubstars2.Controllers
                 {
                     UserName = model.Username,
                     PubstarsPassword = model.Password,
-                    PlayerStats = new PlayerStats()
-                };
+                    PlayerStats = new PlayerStats() { Name = model.Username }
+                };               
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

@@ -27,33 +27,40 @@ namespace Pubstars2.Controllers
 
         public IActionResult Index()
         {
-            //test data
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
-            for (int i = 0; i < 100; i++)
+            foreach(Game game in _db.Games.Include(x=> x.playerStats).ThenInclude(stats => stats.Player))
             {
-                //todo statlines
-                GameSummaryViewModel g = new GameSummaryViewModel()
+                List<StatlineViewModel> redstats = new List<StatlineViewModel>();
+                List<StatlineViewModel> bluestats = new List<StatlineViewModel>();
+                IDictionary<PlayerStats, Rating> newRatings = game.GetNewRatings();
+                foreach(PlayerGameStats stats in game.playerStats)
                 {
-                    redScore = 3,
-                    blueScore = 2,
-                    time = DateTime.UtcNow
-                };
-                g.redStatLines = new List<StatlineViewModel>();
-                g.blueStatLines = new List<StatlineViewModel>();
-                for(int j = 0; j < 5; j++)
-                {
-                    StatlineViewModel slm = new StatlineViewModel()
+                    StatlineViewModel vm = new StatlineViewModel()
                     {
-                        name = "player" + j,
-                        goals = 5 - j + "",
-                        assists = j + "",
-                        ratingChange = "+25",
-                        newRating = "2500"
+                        name = stats.Player.Name, 
+                        goals = stats.Goals.ToString(),
+                        assists = stats.Assists.ToString(),
+                        ratingChange = Math.Round(newRatings[stats.Player].Mean - stats.RatingMean, 2).ToString(),
+                        newRating = Math.Round(newRatings[stats.Player].Mean, 2).ToString()
                     };
-                    g.redStatLines.Add(slm);
-                    g.blueStatLines.Add(slm);
+
+                    if (stats.Team == HqmTeam.red)
+                    {
+                        redstats.Add(vm);
+                    }
+                    else
+                    {
+                        bluestats.Add(vm);
+                    }
                 }
-                gameSummaries.Add(g);
+                gameSummaries.Add(new GameSummaryViewModel()
+                {
+                    time = game.date,
+                    redScore = game.redScore,
+                    blueScore = game.blueScore,
+                    redStatLines = redstats,
+                    blueStatLines = bluestats
+                });
             }
             
             return View(gameSummaries);
@@ -62,15 +69,72 @@ namespace Pubstars2.Controllers
         [HttpPost]
         public IActionResult PostGameResult([FromBody]RankedGameReport report)
         {
-            Game game = CreatePubstarsGame(report);
-            //todo: update player stats/rating? or calculate from aggregate data          
-            _db.Games.Add(game);
-            _db.SaveChanges();            
+            ProcessGameReport(report);                     
             
             return Ok();
         }       
 
-        private Game CreatePubstarsGame(RankedGameReport report)
+        public string SimulateGames(int games)
+        {
+            for(int i = 0; i < games; i++)
+            {
+                int redgoals = 0;
+                int bluegoals = 0;
+                int redassists = 0;
+                int blueassists = 0;
+                Random r = new Random();
+                List<RankedGameReport.PlayerStatLine> statlines = new List<RankedGameReport.PlayerStatLine>();
+                var playerNumbers = Enumerable.Range(r.Next(_db.Users.Count() - 10), 10).OrderBy(a => r.Next()).ToArray();
+                for (int j = 0; j < 10; j++)
+                {
+                    bool redteam = j % 2 == 0;
+                    int g = r.Next(4);
+                    int a = 0;
+                    if (redteam)
+                    {
+                        redgoals += g;
+                        a = r.Next(redgoals - redassists);                        
+                        redassists += a;
+                    }
+                    else
+                    {
+                        bluegoals += g;
+                        a = r.Next(bluegoals - blueassists);                        
+                        blueassists += a;
+                    }                   
+                    
+                    statlines.Add(new RankedGameReport.PlayerStatLine()
+                    {
+                        Name = "player" + playerNumbers[j],
+                        Goals = g,
+                        Assists = a,
+                        Team = redteam ? "Red" : "Blue",
+                        Leaver = false
+                    });
+                }
+                if(redgoals == bluegoals) //tie goes to red team
+                {
+                    redgoals++;
+                    statlines[0].Goals++;
+                }
+
+                ProcessGameReport (new RankedGameReport()
+                {
+                    RedScore = redgoals,
+                    BlueScore = bluegoals,
+                    WinningTeam = redgoals > bluegoals ? "Red" : "Blue",
+                    Date = DateTime.UtcNow,
+                    ServerName = "Simulated",
+                    PlayerStats = statlines
+                });
+                
+
+            }
+            _db.SaveChanges();
+            return "sim done.";
+        }
+
+        private void ProcessGameReport(RankedGameReport report)
         {
             List<PlayerGameStats> pubplayers = new List<PlayerGameStats>();
 
@@ -95,14 +159,23 @@ namespace Pubstars2.Controllers
                 pubplayers.Add(pp);
             }
 
-            return new Game()
+            Game game = new Game()
             {
                 gameId = new Guid(),
                 playerStats = pubplayers,
                 redScore = report.RedScore,
                 blueScore = report.BlueScore,
                 date = report.Date
-            };            
+            };
+            _db.Games.Add(game);
+
+            //apply new ratings
+            foreach(KeyValuePair<PlayerStats, Rating> kvp in game.GetNewRatings())
+            {
+                kvp.Key.RatingMean = kvp.Value.Mean;
+                kvp.Key.RatingUncertainty = kvp.Value.StandardDeviation;
+            }
+            _db.SaveChanges();
         }
 
         

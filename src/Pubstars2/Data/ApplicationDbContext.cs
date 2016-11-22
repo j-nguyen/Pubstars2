@@ -21,5 +21,6 @@ namespace Pubstars2.Data
         }
 
         public DbSet<Game> Games { get; set; }
+        public DbSet<PlayerStats> PlayerStats { get; set; }
     }
 }

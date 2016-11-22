@@ -8,7 +8,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         public string name { get; set; }
 
         [Display(Name = "Rating")]
-        public int rating { get; set; }
+        public double rating { get; set; }
 
         [Display(Name = "GP")]
         public int gamesPlayed { get; set; }
@@ -20,7 +20,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         public int losses { get; set; }
 
         [Display(Name = "Win%")]
-        public int winPercentage { get; set; }
+        public double winPercentage { get; set; }
 
         [Display(Name="PPG")]
         public float pointsPerGame { get; set; }

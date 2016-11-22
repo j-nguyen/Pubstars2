@@ -13,7 +13,7 @@ namespace Pubstars2.Models
     public static class ApplicationDbContextSeedExtentions 
     {
       
-        public static async void SeedUsers(this ApplicationDbContext context)
+        public static void SeedUsers(this ApplicationDbContext context)
         {    
             for(int i = 0; i < 25; i++)
             {
@@ -24,19 +24,12 @@ namespace Pubstars2.Models
                     {
                         UserName = name,
                         PubstarsPassword = "test",
-                        PlayerStats = new Pubstars.PlayerStats()
+                        PlayerStats = new PlayerStats() { Name = name }
                     };
-
                     context.Users.Add(user);
-                }
-                               
+                }                               
             }
-            
-        }
-
-        public static async void SeedGames(this ApplicationDbContext context)
-        {
-            
-        }
+            context.SaveChanges();            
+        }        
     }
 }
