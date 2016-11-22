@@ -29,106 +29,24 @@ namespace Pubstars2.Controllers
         {
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
             foreach(Game game in _db.Games.Include(x=> x.playerStats).ThenInclude(stats => stats.Player))
-            {
-                List<StatlineViewModel> redstats = new List<StatlineViewModel>();
-                List<StatlineViewModel> bluestats = new List<StatlineViewModel>();
-                IDictionary<PlayerStats, Rating> newRatings = game.GetNewRatings();
-                foreach(PlayerGameStats stats in game.playerStats)
-                {
-                    StatlineViewModel vm = new StatlineViewModel()
-                    {
-                        name = stats.Player.Name, 
-                        goals = stats.Goals.ToString(),
-                        assists = stats.Assists.ToString(),
-                        ratingChange = Math.Round(newRatings[stats.Player].Mean - stats.RatingMean, 2).ToString(),
-                        newRating = Math.Round(newRatings[stats.Player].Mean, 2).ToString()
-                    };
-
-                    if (stats.Team == HqmTeam.red)
-                    {
-                        redstats.Add(vm);
-                    }
-                    else
-                    {
-                        bluestats.Add(vm);
-                    }
-                }
-                gameSummaries.Add(new GameSummaryViewModel()
-                {
-                    time = game.date,
-                    redScore = game.redScore,
-                    blueScore = game.blueScore,
-                    redStatLines = redstats,
-                    blueStatLines = bluestats
-                });
-            }
-            
-            return View(gameSummaries);
+            {                
+                gameSummaries.Add(new GameSummaryViewModel(game));
+            }            
+            return View(gameSummaries.OrderByDescending(x=> x.time));
         }
 
         [HttpPost]
         public IActionResult PostGameResult([FromBody]RankedGameReport report)
         {
-            ProcessGameReport(report);                     
-            
+            ProcessGameReport(report);                    
             return Ok();
         }       
 
         public string SimulateGames(int games)
         {
             for(int i = 0; i < games; i++)
-            {
-                int redgoals = 0;
-                int bluegoals = 0;
-                int redassists = 0;
-                int blueassists = 0;
-                Random r = new Random();
-                List<RankedGameReport.PlayerStatLine> statlines = new List<RankedGameReport.PlayerStatLine>();
-                var playerNumbers = Enumerable.Range(r.Next(_db.Users.Count() - 10), 10).OrderBy(a => r.Next()).ToArray();
-                for (int j = 0; j < 10; j++)
-                {
-                    bool redteam = j % 2 == 0;
-                    int g = r.Next(4);
-                    int a = 0;
-                    if (redteam)
-                    {
-                        redgoals += g;
-                        a = r.Next(redgoals - redassists);                        
-                        redassists += a;
-                    }
-                    else
-                    {
-                        bluegoals += g;
-                        a = r.Next(bluegoals - blueassists);                        
-                        blueassists += a;
-                    }                   
-                    
-                    statlines.Add(new RankedGameReport.PlayerStatLine()
-                    {
-                        Name = "player" + playerNumbers[j],
-                        Goals = g,
-                        Assists = a,
-                        Team = redteam ? "Red" : "Blue",
-                        Leaver = false
-                    });
-                }
-                if(redgoals == bluegoals) //tie goes to red team
-                {
-                    redgoals++;
-                    statlines[0].Goals++;
-                }
-
-                ProcessGameReport (new RankedGameReport()
-                {
-                    RedScore = redgoals,
-                    BlueScore = bluegoals,
-                    WinningTeam = redgoals > bluegoals ? "Red" : "Blue",
-                    Date = DateTime.UtcNow,
-                    ServerName = "Simulated",
-                    PlayerStats = statlines
-                });
-                
-
+            {              
+                ProcessGameReport (RankedGameReport.RandomGame(_db.Users.Select(x => x.UserName).ToList()));               
             }
             _db.SaveChanges();
             return "sim done.";
