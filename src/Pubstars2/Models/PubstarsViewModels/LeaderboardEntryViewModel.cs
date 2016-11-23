@@ -23,7 +23,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         public double winPercentage { get; set; }
 
         [Display(Name="PPG")]
-        public float pointsPerGame { get; set; }
+        public double pointsPerGame { get; set; }
 
         [Display(Name="PTS")]
         public int points { get; set; }

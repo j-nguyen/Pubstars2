@@ -33,7 +33,7 @@ namespace Pubstars2.Controllers
                 {
                     Name = user.UserName,
                     Password = user.PubstarsPassword,
-                    Rating = user.PlayerStats.RatingMean
+                    Rating = user.PlayerStats.Rating.Mean
                 };                    
             }
             return Json(userData);

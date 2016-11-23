@@ -7,6 +7,7 @@ using Pubstars2.Data;
 using Pubstars2.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pubstars2.Services;
 
 namespace Pubstars2
 {
@@ -31,6 +32,8 @@ namespace Pubstars2
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IStatsService, StatsService>();
 
             services.AddMvc();
         }
@@ -57,6 +60,8 @@ namespace Pubstars2
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.ApplicationServices.GetRequiredService<ApplicationDbContext>().SeedUsers();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Pubstars2.Models.Pubstars
+namespace PubstarsModel
 {
     public class Season
     {

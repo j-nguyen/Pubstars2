@@ -1,5 +1,4 @@
-﻿using Moserware.Skills;
-using Pubstars2.Models.Pubstars;
+﻿using PubstarsModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,7 +23,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         {
             List<StatlineViewModel> redstats = new List<StatlineViewModel>();
             List<StatlineViewModel> bluestats = new List<StatlineViewModel>();
-            IDictionary<PlayerStats, Rating> newRatings = game.GetNewRatings();
+            IDictionary<Player, Rating> newRatings = game.GetNewRatings();
             foreach (PlayerGameStats stats in game.playerStats)
             {
                 StatlineViewModel vm = new StatlineViewModel()

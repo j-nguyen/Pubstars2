@@ -5,9 +5,8 @@ using Pubstars2.Models.AccountViewModels;
 using Pubstars2.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Pubstars2.Models.Pubstars;
 using System.Security.Claims;
-using Moserware.Skills;
+using PubstarsModel;
 
 namespace Pubstars2.Controllers
 {
@@ -118,7 +117,7 @@ namespace Pubstars2.Controllers
                 {
                     UserName = model.Username,
                     PubstarsPassword = model.Password,
-                    PlayerStats = new PlayerStats() { Name = model.Username }
+                    PlayerStats = new Player() { Name = model.Username }
                 };               
 
                 var result = await _userManager.CreateAsync(user);

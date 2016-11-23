@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Models;
-using Pubstars2.Models.Pubstars;
+using PubstarsModel;
 
 namespace Pubstars2.Data
 {
@@ -21,6 +21,7 @@ namespace Pubstars2.Data
         }
 
         public DbSet<Game> Games { get; set; }
-        public DbSet<PlayerStats> PlayerStats { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<PlayerGameStats> PlayerStats { get; set; }
     }
 }

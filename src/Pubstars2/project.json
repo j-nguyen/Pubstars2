@@ -42,8 +42,7 @@
       "type": "build"
     },
     "AspNet.Security.OpenId.Steam": "1.0.0-beta1-final",
-    "SkillsCore": "1.0.0-*"
-  },
+    "PubstarsModel": "1.0.0-*"  },
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

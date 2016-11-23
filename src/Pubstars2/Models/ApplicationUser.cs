@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Pubstars2.Models.Pubstars;
+using PubstarsModel;
 
 namespace Pubstars2.Models
 {
@@ -7,6 +7,6 @@ namespace Pubstars2.Models
     {
         public string PubstarsPassword { get; set; }
 
-        public PlayerStats PlayerStats { get; set;}
+        public Player PlayerStats { get; set;}
     }
 }

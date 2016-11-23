@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Pubstars2.Data;
-using Pubstars2.Models.Pubstars;
-using PubstarsDtos;
-using System;
-using System.Collections.Generic;
+﻿using Pubstars2.Data;
+using PubstarsModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Pubstars2.Models
 {
@@ -24,7 +18,7 @@ namespace Pubstars2.Models
                     {
                         UserName = name,
                         PubstarsPassword = "test",
-                        PlayerStats = new PlayerStats() { Name = name }
+                        PlayerStats = new Player() { Name = name }
                     };
                     context.Users.Add(user);
                 }                               
