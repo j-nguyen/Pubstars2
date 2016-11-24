@@ -10,7 +10,7 @@ namespace Pubstars2.Services
 {
     public interface ILeaderboardService
     {
-        void SetDirty();
+        void FlushLeaderboards();
         IEnumerable<LeaderboardEntryViewModel> GetLeaderboard();
     }
 }

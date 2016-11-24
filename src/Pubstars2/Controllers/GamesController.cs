@@ -98,7 +98,7 @@ namespace Pubstars2.Controllers
                 kvp.Key.Rating.StandardDeviation = kvp.Value.StandardDeviation;
             }
             _db.SaveChanges();
-            _leaderboards.SetDirty();
+            _leaderboards.FlushLeaderboards();
         }
 
         

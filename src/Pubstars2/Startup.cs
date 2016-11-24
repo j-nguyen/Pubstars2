@@ -38,8 +38,7 @@ namespace Pubstars2
 
             services.AddScoped<IStatsService, StatsService>();
             services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
-
-            services.AddSingleton<ILeaderboardService, LeaderboardService>();
+            services.AddScoped<ILeaderboardService, LeaderboardService>();
 
             services.AddBootstrapPagerGenerator(options =>
             {

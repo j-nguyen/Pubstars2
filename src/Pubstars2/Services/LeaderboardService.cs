@@ -17,8 +17,6 @@ namespace Pubstars2.Services
         IStatsService _statsService;
         IMemoryCache _cache;
 
-        private bool _dirty;
-
         public LeaderboardService(IPubstarsDb context, IStatsService stats, IMemoryCache cache)
         {
             _db = context;
@@ -29,7 +27,7 @@ namespace Pubstars2.Services
         public IEnumerable<LeaderboardEntryViewModel> GetLeaderboard()
         {
             List<LeaderboardEntryViewModel> entries;
-            if (_dirty || !_cache.TryGetValue(k_LeaderboardCacheKey, out entries))
+            if (!_cache.TryGetValue(k_LeaderboardCacheKey, out entries))
             {
                 entries = new List<LeaderboardEntryViewModel>();
                 foreach (Player player in _db.Players())
@@ -52,15 +50,16 @@ namespace Pubstars2.Services
                         assists = a
                     });
                 }
-                _cache.Set(k_LeaderboardCacheKey, entries);
-                _dirty = false;
+                _cache.Set(k_LeaderboardCacheKey, entries);                
             }
             return entries.OrderByDescending(o => o.rating);
         }
 
-        public void SetDirty()
+        public void FlushLeaderboards()
         {
-            _dirty = true;
+            _cache.Remove(k_LeaderboardCacheKey);
         }
+
+        
     }
 }
