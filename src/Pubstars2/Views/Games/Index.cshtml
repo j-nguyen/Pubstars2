@@ -1,4 +1,4 @@
-@model IEnumerable<Pubstars2.Models.PubstarsViewModels.GameSummaryViewModel>
+@model Sakura.AspNetCore.IPagedList<Pubstars2.Models.PubstarsViewModels.GameSummaryViewModel>
 
 @{
     ViewData["Title"] = "Games";
@@ -6,7 +6,7 @@
 
 <h2>Games</h2>
 
-
+<pager />
 @foreach(var game in Model)
 {
     <table class="table">

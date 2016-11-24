@@ -10,6 +10,7 @@ using Pubstars2.Models;
 using Pubstars2.Models.PubstarsViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Sakura.AspNetCore;
 
 namespace Pubstars2.Controllers
 {
@@ -24,14 +25,15 @@ namespace Pubstars2.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page)
         {
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
             foreach(Game game in _db.Games())
             {                
                 gameSummaries.Add(new GameSummaryViewModel(game));
-            }            
-            return View(gameSummaries.OrderByDescending(x=> x.time));
+            }
+            var viewData = gameSummaries.OrderByDescending(x => x.time).ToDynamicPagedList(10, page == 0 ? 1 : page);
+            return View(viewData);
         }
 
         [HttpPost]

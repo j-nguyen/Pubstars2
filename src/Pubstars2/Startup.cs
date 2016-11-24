@@ -8,6 +8,7 @@ using Pubstars2.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Services;
+using Sakura.AspNetCore.Mvc;
 
 namespace Pubstars2
 {
@@ -35,6 +36,12 @@ namespace Pubstars2
 
             services.AddScoped<IStatsService, StatsService>();
             services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
+
+            services.AddBootstrapPagerGenerator(options =>
+            {
+                // Use default pager options.
+                options.ConfigureDefault();
+            });
 
             services.AddMvc();
         }
