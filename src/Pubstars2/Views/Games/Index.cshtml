@@ -65,7 +65,7 @@
                     NEW RATING
                 </th>
             </tr>
-            @for (int j = 0; j < 5; j++) //todo: replace with player stat lines
+            @for (int j = 0; j < Math.Min(game.redStatLines.Count, game.blueStatLines.Count); j++) //todo: replace with player stat lines
             {
                 <tr>
                     <td>

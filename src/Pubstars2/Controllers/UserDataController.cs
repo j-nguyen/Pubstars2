@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
 using PubstarsDtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pubstars2.Controllers
 {
@@ -27,7 +28,7 @@ namespace Pubstars2.Controllers
         {
             Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
            
-            foreach (ApplicationUser user in _userManager.Users)
+            foreach (ApplicationUser user in _userManager.Users.Include(x=>x.PlayerStats).ThenInclude(x=>x.Rating))
             {
                 userData[user.UserName] = new UserData()
                 {
@@ -36,7 +37,7 @@ namespace Pubstars2.Controllers
                     Rating = user.PlayerStats.Rating.Mean
                 };                    
             }
-            return Json(userData);
+            return new JsonResult(userData);
         }
     }
 }

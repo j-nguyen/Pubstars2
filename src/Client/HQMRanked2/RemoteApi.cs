@@ -25,8 +25,12 @@ namespace PubstarsClient
             var client = new RestClient(k_Url + "UserData/GetUserData");
             var request = new RestRequest(Method.GET);             
             var response = client.Execute<Dictionary<string, UserData>>(request);
-            AllUserData = response.Data;
-            return true;
+            if(response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                AllUserData = response.Data;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

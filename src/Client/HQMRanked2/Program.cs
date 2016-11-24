@@ -12,36 +12,18 @@ namespace PubstarsClient
     class Program
     {
         public static void Main(string[] args)
-        {
-            RankedGameReport g = new RankedGameReport()
-            {
-                RedScore = 10,
-                BlueScore = 11,
-                WinningTeam = "Blue",
-                Date = DateTime.UtcNow,
-                ServerName = "testServer"
-            };
-
-            g.PlayerStats.Add(new RankedGameReport.PlayerStatLine()
-            {
-                Name = "omaha",
-                Goals = 5,
-                Assists = 2,
-                Team = "Blue",
-                Leaver = false
-
-            });         
-
-            RemoteApi.SendGameResult(g);
-            
-
+        {           
             Console.WriteLine("Looking for server...");
             while (!MemoryEditor.Init()) { }
             Console.WriteLine("Server found.");
 
             Console.WriteLine("Reading user data...");
-            RemoteApi.GetUserData();
-            Console.WriteLine("done.");
+            if(!RemoteApi.GetUserData())
+            {
+                Console.WriteLine("Unable to fetch user data.");
+                Console.ReadLine();
+            }
+            else Console.WriteLine("done.");
 
             CommandListener cmdListener = new CommandListener(Chat.MessageCount);
             Chat.RecordCommandSource();            
