@@ -7,45 +7,22 @@ using System;
 using PubstarsModel;
 using Pubstars2.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Pubstars2.Controllers
 {
     public class LeaderboardController : Controller
     {
-        IPubstarsDb _db;
-        IStatsService _statsService;
+        ILeaderboardService _leaderboards;
 
-        public LeaderboardController(IPubstarsDb context, IStatsService stats)
+        public LeaderboardController(ILeaderboardService ls)
         {
-            _db = context;
-            _statsService = stats;
+            _leaderboards = ls;
         }
 
         public IActionResult Index()
-        {
-            //fakedata
-            List<LeaderboardEntryViewModel> entries = new List<LeaderboardEntryViewModel>();            
-            foreach(Player player in _db.Players())
-            {
-                int gp = _statsService.GetGamesPlayed(player);
-                int w = _statsService.GetWins(player);
-                int g = _statsService.GetGoals(player);
-                int a = _statsService.GetAssists(player);
-                entries.Add(new LeaderboardEntryViewModel()
-                {
-                    name = player.Name,
-                    rating = Math.Round(player.Rating.Mean,2),
-                    gamesPlayed = gp,
-                    wins = w,
-                    losses = gp - w,
-                    winPercentage = Math.Round(w / (double)gp, 3),
-                    pointsPerGame = Math.Round((g + a) / (double)gp,2),
-                    points = g + a,
-                    goals = g,
-                    assists = a
-                });
-            }
-            return View(entries.OrderByDescending(o => o.rating));            
+        {           
+            return View(_leaderboards.GetLeaderboard());            
         }
     }
 }

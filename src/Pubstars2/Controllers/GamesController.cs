@@ -11,18 +11,21 @@ using Pubstars2.Models.PubstarsViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Sakura.AspNetCore;
+using Pubstars2.Services;
 
 namespace Pubstars2.Controllers
 {
     public class GamesController : Controller
     {
         private IPubstarsDb _db;
+        private ILeaderboardService _leaderboards;
         private UserManager<ApplicationUser> _userManager;
 
-        public GamesController(IPubstarsDb db, UserManager<ApplicationUser> userManager)
+        public GamesController(IPubstarsDb db, UserManager<ApplicationUser> userManager, ILeaderboardService ls)
         {
             _db = db;
             _userManager = userManager;
+            _leaderboards = ls;
         }
 
         public IActionResult Index(int page)
@@ -95,6 +98,7 @@ namespace Pubstars2.Controllers
                 kvp.Key.Rating.StandardDeviation = kvp.Value.StandardDeviation;
             }
             _db.SaveChanges();
+            _leaderboards.SetDirty();
         }
 
         

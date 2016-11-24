@@ -34,8 +34,12 @@ namespace Pubstars2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddMemoryCache();
+
             services.AddScoped<IStatsService, StatsService>();
             services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
+
+            services.AddSingleton<ILeaderboardService, LeaderboardService>();
 
             services.AddBootstrapPagerGenerator(options =>
             {
