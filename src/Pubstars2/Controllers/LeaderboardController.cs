@@ -12,10 +12,10 @@ namespace Pubstars2.Controllers
 {
     public class LeaderboardController : Controller
     {
-        ApplicationDbContext _db;
+        IPubstarsDb _db;
         IStatsService _statsService;
 
-        public LeaderboardController(ApplicationDbContext context, IStatsService stats)
+        public LeaderboardController(IPubstarsDb context, IStatsService stats)
         {
             _db = context;
             _statsService = stats;
@@ -25,7 +25,7 @@ namespace Pubstars2.Controllers
         {
             //fakedata
             List<LeaderboardEntryViewModel> entries = new List<LeaderboardEntryViewModel>();            
-            foreach(Player player in _db.Players.Include(x => x.Rating))
+            foreach(Player player in _db.Players())
             {
                 int gp = _statsService.GetGamesPlayed(player);
                 int w = _statsService.GetWins(player);

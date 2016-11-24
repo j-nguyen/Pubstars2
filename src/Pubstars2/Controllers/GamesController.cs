@@ -15,10 +15,10 @@ namespace Pubstars2.Controllers
 {
     public class GamesController : Controller
     {
-        private ApplicationDbContext _db;
+        private IPubstarsDb _db;
         private UserManager<ApplicationUser> _userManager;
 
-        public GamesController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public GamesController(IPubstarsDb db, UserManager<ApplicationUser> userManager)
         {
             _db = db;
             _userManager = userManager;
@@ -27,7 +27,7 @@ namespace Pubstars2.Controllers
         public IActionResult Index()
         {
             List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
-            foreach(Game game in _db.Games.Include(x=> x.playerStats).ThenInclude(stats => stats.Player).ThenInclude(player => player.Rating))
+            foreach(Game game in _db.Games())
             {                
                 gameSummaries.Add(new GameSummaryViewModel(game));
             }            
@@ -45,7 +45,7 @@ namespace Pubstars2.Controllers
         {
             for(int i = 0; i < games; i++)
             {              
-                ProcessGameReport (RankedGameReport.RandomGame(_db.Users.Select(x => x.UserName).ToList()));               
+                ProcessGameReport (RankedGameReport.RandomGame(_db.Users().Select(x => x.UserName).ToList()));               
             }
             _db.SaveChanges();
             return "sim done.";
@@ -57,7 +57,7 @@ namespace Pubstars2.Controllers
 
             foreach (RankedGameReport.PlayerStatLine p in report.PlayerStats)
             {
-                ApplicationUser user = _db.Users.Include(x => x.PlayerStats).ThenInclude(x => x.Rating).FirstOrDefault(x => x.UserName == p.Name);
+                ApplicationUser user = _db.UsersWithPlayer().FirstOrDefault(x => x.UserName == p.Name);
                 if (user == null)
                 {
                     throw new InvalidOperationException("tried to report game with unregistered players.");
@@ -84,7 +84,7 @@ namespace Pubstars2.Controllers
                 blueScore = report.BlueScore,
                 date = report.Date
             };
-            _db.Games.Add(game);
+            _db.AddGame(game);
 
             //apply new ratings
             foreach(KeyValuePair<Player, Rating> kvp in game.GetNewRatings())

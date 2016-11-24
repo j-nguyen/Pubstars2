@@ -34,6 +34,7 @@ namespace Pubstars2
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IStatsService, StatsService>();
+            services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
 
             services.AddMvc();
         }
