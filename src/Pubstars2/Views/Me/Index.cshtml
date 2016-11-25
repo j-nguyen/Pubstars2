@@ -4,6 +4,67 @@
     ViewData["Title"] = "View";
 }
 
-<h2>My Stats</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="description" content="D3 Line chart example 1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+</head>
+<body align="center">
+    <h3>Elo Graph</h3>
+    <div align="center">
+        <svg id="lineChart" width="960" height="500"></svg>
+        <style>
+            .line {
+                fill: none;
+                stroke: steelblue;
+                stroke-width: 2px;
+            }
+        </style>
+        <script>
+        d3.json("Me/GetEloGraphJson", function(error, result){
+            var data = result;
+
+            var svg = d3.select("#lineChart"),
+                margin = { top: 20, right: 20, bottom: 30, left: 50 },
+                width = +svg.attr("width") - margin.left - margin.right,
+                height = +svg.attr("height") - margin.top - margin.bottom,
+                g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleLinear()
+            .range([0, width]);
+
+            var y = d3.scaleLinear()
+            .range([height, 0]);
+
+            x.domain(d3.extent(data, function (d, i) { return i; }));
+            y.domain(d3.extent(data, function (d) { return d; }));
 
 
+            var line = d3.line()
+                .x(function (d, i) { return x(i); })
+                .y(function (d) { return y(d); });
+
+            svg.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," +height+")")
+                .call(d3.axisTop(x));
+
+            svg.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisRight(y))
+
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("d", line);
+        });
+
+
+        </script>
+    </div>
+</body>
+</html>

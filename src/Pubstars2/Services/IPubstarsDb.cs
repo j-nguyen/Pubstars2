@@ -15,6 +15,8 @@ namespace Pubstars2.Data
         IEnumerable<Player> Players();
         IEnumerable<Game> Games();
 
+        IEnumerable<PlayerGameStats> PlayerGameStats();
+
         void AddGame(Game game);
         void SaveChanges();
     }

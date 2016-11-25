@@ -27,6 +27,11 @@ namespace Pubstars2.Data
             return _db.Games.Include(x => x.playerStats).ThenInclude(stats => stats.Player).ThenInclude(player => player.Rating);
         }
 
+        public IEnumerable<PlayerGameStats> PlayerGameStats()
+        {
+            return _db.PlayerStats.Include(x => x.Player).Include(x => x.Game) ;
+        }
+
         public IEnumerable<Player> Players()
         {
             return _db.Players.Include(x => x.Rating);
