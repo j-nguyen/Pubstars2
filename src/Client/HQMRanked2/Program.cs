@@ -18,12 +18,13 @@ namespace PubstarsClient
             Console.WriteLine("Server found.");
 
             Console.WriteLine("Reading user data...");
-            if(!RemoteApi.GetUserData())
+            while(!RemoteApi.GetUserData())
             {
                 Console.WriteLine("Unable to fetch user data.");
-                Console.ReadLine();
+                Console.WriteLine("Retrying...");
             }
-            else Console.WriteLine("done.");
+
+            Console.WriteLine("done.");
 
             CommandListener cmdListener = new CommandListener(Chat.MessageCount);
             Chat.RecordCommandSource();            

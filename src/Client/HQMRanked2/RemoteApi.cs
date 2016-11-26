@@ -44,8 +44,14 @@ namespace PubstarsClient
             var request = new RestRequest(Method.POST);
             var json = JsonConvert.SerializeObject(gameReport);
             request.AddParameter("application/json", json, ParameterType.RequestBody);
-            var response = client.Execute(request);
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            var response = client.Execute<Dictionary<string, UserData>>(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                AllUserData = response.Data;
+                return true;
+            }
+            Console.WriteLine(response.StatusCode + " - " + response.ErrorMessage);
+            return false;
         }
     }
 

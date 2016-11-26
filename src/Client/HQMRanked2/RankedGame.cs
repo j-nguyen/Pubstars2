@@ -83,11 +83,14 @@ namespace PubstarsClient
             {
                 try
                 {
-                    RemoteApi.SendGameResult(m_LastGameReport);//send result to server
+                    if (!RemoteApi.SendGameResult(m_LastGameReport))
+                    {
+                        //save game to post later
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Chat.SendMessage("Could not post game result: " + ex.Message);
+                    Console.WriteLine("Could not post game result: " + ex.Message);
                     //save game to post later.
                 }
             }           
