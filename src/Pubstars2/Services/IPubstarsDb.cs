@@ -1,4 +1,5 @@
 ﻿using Pubstars2.Models;
+using PubstarsDtos;
 using PubstarsModel;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,8 @@ namespace Pubstars2.Data
         IEnumerable<Game> Games();
 
         IEnumerable<PlayerGameStats> PlayerGameStats();
+
+        Dictionary<string,UserData> GetUserData();
 
         void AddGame(Game game);
         void SaveChanges();

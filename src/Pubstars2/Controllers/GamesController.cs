@@ -43,7 +43,7 @@ namespace Pubstars2.Controllers
         public IActionResult PostGameResult([FromBody]RankedGameReport report)
         {
             ProcessGameReport(report);                    
-            return Ok();
+            return Ok(_db.GetUserData());
         }       
 
         public string SimulateGames(int games)

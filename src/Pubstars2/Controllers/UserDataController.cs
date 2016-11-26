@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Pubstars2.Models;
 using PubstarsDtos;
 using Microsoft.EntityFrameworkCore;
+using Pubstars2.Data;
 
 namespace Pubstars2.Controllers
 {
     public class UserdataController : Controller
     {
-        private UserManager<ApplicationUser> _userManager;
+        IPubstarsDb _db;
 
-        public UserdataController(UserManager<ApplicationUser> usermanager)
+        public UserdataController(IPubstarsDb db)
         {
-            _userManager = usermanager;
+            _db = db;
             
         }
 
@@ -25,19 +26,8 @@ namespace Pubstars2.Controllers
         //for client
         [HttpGet]
         public IActionResult GetUserData()
-        {
-            Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
-           
-            foreach (ApplicationUser user in _userManager.Users.Include(x=>x.PlayerStats).ThenInclude(x=>x.Rating))
-            {
-                userData[user.UserName] = new UserData()
-                {
-                    Name = user.UserName,
-                    Password = user.PubstarsPassword,
-                    Rating = user.PlayerStats.Rating.Mean
-                };                    
-            }
-            return new JsonResult(userData);
+        {            
+            return new JsonResult(_db.GetUserData());
         }
     }
 }

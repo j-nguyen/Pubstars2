@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using PubstarsModel;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Models;
+using PubstarsDtos;
+using Microsoft.AspNetCore.Identity;
 
 namespace Pubstars2.Data
 {
     public class PubstarsSqlDb : IPubstarsDb
     {
         ApplicationDbContext _db;
+        private UserManager<ApplicationUser> _userManager;
 
-        public PubstarsSqlDb(ApplicationDbContext db)
+        public PubstarsSqlDb(ApplicationDbContext db, UserManager<ApplicationUser> usermanager)
         {
+            _userManager = usermanager;
             _db = db;
         }
 
@@ -25,6 +29,22 @@ namespace Pubstars2.Data
         public IEnumerable<Game> Games()
         {
             return _db.Games.Include(x => x.playerStats).ThenInclude(stats => stats.Player).ThenInclude(player => player.Rating);
+        }
+
+        public Dictionary<string, UserData> GetUserData()
+        {
+            Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
+
+            foreach (ApplicationUser user in _userManager.Users.Include(x => x.PlayerStats).ThenInclude(x => x.Rating))
+            {
+                userData[user.UserName] = new UserData()
+                {
+                    Name = user.UserName,
+                    Password = user.PubstarsPassword,
+                    Rating = user.PlayerStats.Rating.Mean
+                };
+            }
+            return userData;
         }
 
         public IEnumerable<PlayerGameStats> PlayerGameStats()
