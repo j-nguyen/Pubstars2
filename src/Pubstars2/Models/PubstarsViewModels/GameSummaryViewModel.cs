@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Pubstars2.Models.PubstarsViewModels
 {
@@ -44,6 +45,8 @@ namespace Pubstars2.Models.PubstarsViewModels
                     bluestats.Add(vm);
                 }
             }
+            redstats = redstats.OrderByDescending(x => x.newRating).ToList();
+            bluestats = bluestats.OrderByDescending(x => x.newRating).ToList();
             time = game.date;
             redScore = game.redScore;
             blueScore = game.blueScore;
