@@ -24,35 +24,23 @@ namespace Pubstars2.Services
             _cache = cache;
         }
 
-        public IEnumerable<LeaderboardEntryViewModel> GetLeaderboard()
+        public IEnumerable<PlayerStatsViewModel> GetLeaderboard()
         {
-            List<LeaderboardEntryViewModel> entries;
+            List<PlayerStatsViewModel> entries;
             if (!_cache.TryGetValue(k_LeaderboardCacheKey, out entries))
             {
-                entries = new List<LeaderboardEntryViewModel>();
+                entries = new List<PlayerStatsViewModel>();
                 foreach (Player player in _db.Players())
                 {
                     int gp = _statsService.GetGamesPlayed(player);
                     int w = _statsService.GetWins(player);
                     int g = _statsService.GetGoals(player);
                     int a = _statsService.GetAssists(player);
-                    entries.Add(new LeaderboardEntryViewModel()
-                    {
-                        name = player.Name,
-                        rating = Math.Round(player.Rating.Mean, 2),
-                        gamesPlayed = gp,
-                        wins = w,
-                        losses = gp - w,
-                        winPercentage = Math.Round(w / (double)gp, 3),
-                        pointsPerGame = Math.Round((g + a) / (double)gp, 2),
-                        points = g + a,
-                        goals = g,
-                        assists = a
-                    });
+                    entries.Add(new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w));                    
                 }
                 _cache.Set(k_LeaderboardCacheKey, entries);                
             }
-            return entries.OrderByDescending(o => o.rating);
+            return entries.OrderByDescending(o => o.Rating);
         }
 
         public void FlushLeaderboards()

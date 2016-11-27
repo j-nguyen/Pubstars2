@@ -11,6 +11,6 @@ namespace Pubstars2.Services
     public interface ILeaderboardService
     {
         void FlushLeaderboards();
-        IEnumerable<LeaderboardEntryViewModel> GetLeaderboard();
+        IEnumerable<PlayerStatsViewModel> GetLeaderboard();
     }
 }
