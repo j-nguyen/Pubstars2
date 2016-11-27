@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Pubstars2.Services;
 using Sakura.AspNetCore.Mvc;
 
+
 namespace Pubstars2
 {
     public class Startup
@@ -72,7 +73,9 @@ namespace Pubstars2
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+#if TESTING
             app.ApplicationServices.GetRequiredService<ApplicationDbContext>().SeedUsers();
+#endif
         }
     }
 }

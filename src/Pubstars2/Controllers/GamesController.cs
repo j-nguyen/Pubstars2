@@ -44,17 +44,7 @@ namespace Pubstars2.Controllers
         {
             ProcessGameReport(report);                    
             return Ok(_db.GetUserData());
-        }       
-
-        public string SimulateGames(int games)
-        {
-            for(int i = 0; i < games; i++)
-            {              
-                ProcessGameReport (RankedGameReport.RandomGame(_db.Users().Select(x => x.UserName).ToList()));               
-            }
-            _db.SaveChanges();
-            return "sim done.";
-        }
+        }      
 
         private void ProcessGameReport(RankedGameReport report)
         {
@@ -100,7 +90,16 @@ namespace Pubstars2.Controllers
             _db.SaveChanges();
             _leaderboards.FlushLeaderboards();
         }
-
-        
+#if TESTING
+        public string SimulateGames(int games)
+        {
+            for (int i = 0; i < games; i++)
+            {
+                ProcessGameReport(RankedGameReport.RandomGame(_db.Users().Select(x => x.UserName).ToList()));
+            }
+            _db.SaveChanges();
+            return "sim done.";
+        }
+#endif
     }
 }
