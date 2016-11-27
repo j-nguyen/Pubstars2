@@ -90,6 +90,17 @@ namespace Pubstars2.Controllers
             _db.SaveChanges();
             _leaderboards.FlushLeaderboards();
         }
+
+        public JsonResult GameData()
+        {
+            List<GameSummaryViewModel> gameSummaries = new List<GameSummaryViewModel>();
+            foreach (Game game in _db.Games())
+            {
+                gameSummaries.Add(new GameSummaryViewModel(game));
+            }
+            var viewData = gameSummaries.OrderByDescending(x => x.time);
+            return Json(gameSummaries);
+        }
 #if TESTING
         public string SimulateGames(int games)
         {

@@ -89,7 +89,7 @@
             }
         </style>
         <script>
-            var url = "GetEloGraphJson?Username=";
+            var url = "Profile/GetEloGraphJson/username?=";
             var name = "@Model.PlayerStats.Name";
             url = url.concat(name);
             d3.json(url, function (error, result) {
