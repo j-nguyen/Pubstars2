@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Sakura.AspNetCore;
 using Pubstars2.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pubstars2.Controllers
 {
@@ -40,7 +41,8 @@ namespace Pubstars2.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostGameResult([FromBody]RankedGameReport report)
+        [Authorize(Roles = "client")]
+        public IActionResult ReportGame([FromBody]RankedGameReport report)
         {
             ProcessGameReport(report);                    
             return Ok(_db.GetUserData());

@@ -7,7 +7,7 @@ namespace Pubstars2.Models
     public static class ApplicationDbContextSeedExtentions 
     {
       
-        public static void SeedUsers(this ApplicationDbContext context)
+        public static void SeedUsers(this ApplicationDbContext context, ApplicationUser client)
         {    
             for(int i = 0; i < 25; i++)
             {
@@ -23,6 +23,7 @@ namespace Pubstars2.Models
                     context.Users.Add(user);
                 }                               
             }
+            context.Users.Add(client);
             context.SaveChanges();            
         }        
     }

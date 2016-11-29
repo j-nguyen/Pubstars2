@@ -9,19 +9,22 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Services;
 using Sakura.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace Pubstars2
 {
     public class Startup
     {
+        
         private IConfiguration Configuration;
 
+        
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(env.ContentRootPath);
             builder.AddJsonFile("appsettings.json");
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -31,15 +34,45 @@ namespace Pubstars2
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>( o=>
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequiredLength = 6;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            // Register the OpenIddict services, including the default Entity Framework stores.
+            services.AddOpenIddict<ApplicationDbContext>()
+                // Register the ASP.NET Core MVC binder used by OpenIddict.
+                // Note: if you don't call this method, you won't be able to
+                // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
+                .AddMvcBinders()
+
+                // Enable the token endpoint (required to use the password flow).
+                .EnableTokenEndpoint("/connect/token")
+
+                // Allow client applications to use the grant_type=password flow.
+                .AllowPasswordFlow()
+                .AllowRefreshTokenFlow()
+
+                // During development, disable the HTTPS requirement.
+                .DisableHttpsRequirement()
+
+                // Register a new ephemeral key, that is discarded when the application
+                // shuts down. Tokens signed using this key are automatically invalidated.
+                // This method should only be used during development.
+                .AddEphemeralSigningKey();
 
             services.AddMemoryCache();
 
             services.AddScoped<IStatsService, StatsService>();
             services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
             services.AddScoped<ILeaderboardService, LeaderboardService>();
+            services.AddSingleton(Configuration);
 
             services.AddBootstrapPagerGenerator(options =>
             {
@@ -50,7 +83,6 @@ namespace Pubstars2
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
@@ -66,6 +98,10 @@ namespace Pubstars2
 
             app.UseSteamAuthentication(x => x.ApplicationKey = Configuration.GetValue<string>("steamapi"));
 
+            app.UseOAuthValidation();
+
+            app.UseOpenIddict();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -74,7 +110,10 @@ namespace Pubstars2
             });
 
 #if TESTING
-            app.ApplicationServices.GetRequiredService<ApplicationDbContext>().SeedUsers();
+
+            PubstarsSeeder s = new PubstarsSeeder(app.ApplicationServices.GetService<UserManager<ApplicationUser>>(), Configuration, app.ApplicationServices.GetService<RoleManager<IdentityRole>>());
+            s.SeedPlayers();
+           
 #endif
         }
     }

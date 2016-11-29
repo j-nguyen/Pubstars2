@@ -5,6 +5,7 @@ using Pubstars2.Models;
 using PubstarsDtos;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Pubstars2.Controllers
 {
@@ -25,6 +26,7 @@ namespace Pubstars2.Controllers
 
         //for client
         [HttpGet]
+        [Authorize(Roles ="client")]
         public IActionResult GetUserData()
         {            
             return new JsonResult(_db.GetUserData());
