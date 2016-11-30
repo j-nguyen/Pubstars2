@@ -54,11 +54,9 @@ namespace Pubstars2.Services
             string pw =  _config.GetValue<string>("clientPassword");
             ApplicationUser client = new ApplicationUser()
             {
-                UserName = name,    
-                PlayerStats = new Player(),
-                PubstarsPassword = pw
+                UserName = name 
             };
-            if(!_db.Users.Contains(client))
+            if(await _db.FindByNameAsync(name) == null)
             {
                 await _db.CreateAsync(client, pw);
                 await _db.AddToRoleAsync(client, role.Name);

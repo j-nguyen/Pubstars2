@@ -37,12 +37,15 @@ namespace Pubstars2.Data
 
             foreach (ApplicationUser user in _userManager.Users.Include(x => x.PlayerStats).ThenInclude(x => x.Rating))
             {
-                userData[user.UserName] = new UserData()
+                if(user.PlayerStats != null)
                 {
-                    Name = user.UserName,
-                    Password = user.PubstarsPassword,
-                    Rating = user.PlayerStats.Rating.Mean
-                };
+                    userData[user.UserName] = new UserData()
+                    {
+                        Name = user.UserName,
+                        Password = user.PubstarsPassword,
+                        Rating = user.PlayerStats.Rating.Mean
+                    };
+                }                
             }
             return userData;
         }
