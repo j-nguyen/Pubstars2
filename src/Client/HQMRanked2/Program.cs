@@ -12,19 +12,21 @@ namespace PubstarsClient
     class Program
     {
         public static void Main(string[] args)
-        {           
-            Console.WriteLine("Looking for server...");
-            while (!MemoryEditor.Init()) { }
-            Console.WriteLine("Server found.");
-
+        {
             Console.WriteLine("Reading user data...");
-            while(!RemoteApi.GetUserData())
+            while (!RemoteApi.GetUserData())
             {
                 Console.WriteLine("Unable to fetch user data.");
                 Console.WriteLine("Retrying...");
             }
 
             Console.WriteLine("done.");
+
+            Console.WriteLine("Looking for server...");
+            while (!MemoryEditor.Init()) { }
+            Console.WriteLine("Server found.");
+            
+            
 
             CommandListener cmdListener = new CommandListener(Chat.MessageCount);
             Chat.RecordCommandSource();            

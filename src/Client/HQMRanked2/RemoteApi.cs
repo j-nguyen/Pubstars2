@@ -15,15 +15,20 @@ namespace PubstarsClient
     {
         public static Dictionary<string, UserData> AllUserData = new Dictionary<string,UserData>();
 
-        private const string k_Url = "http://localhost:5000/";
+        private const string k_Url = "http://pubstars.us-east-2.elasticbeanstalk.com/";
+        private const string username = "pubstars_client";
+        private const string password = "64dQz8pRGxCPMjqc";
+        private static string s_Jwt = "";
         /// <summary>
         /// Initialized user data from server
         /// </summary>
         /// <returns>User data</returns>
         public static bool GetUserData()
         {
+            GetToken(username, password);
             var client = new RestClient(k_Url + "UserData/GetUserData");
-            var request = new RestRequest(Method.GET);             
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", s_Jwt));
             var response = client.Execute<Dictionary<string, UserData>>(request);
             if(response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -40,6 +45,7 @@ namespace PubstarsClient
         /// <returns>Updated user data</returns>
         public static bool SendGameResult(RankedGameReport gameReport)
         {
+            GetToken(username, password);
             RestClient client = new RestClient(k_Url+ "Games/PostGameResult");
             var request = new RestRequest(Method.POST);
             var json = JsonConvert.SerializeObject(gameReport);
@@ -52,6 +58,30 @@ namespace PubstarsClient
             }
             Console.WriteLine(response.StatusCode + " - " + response.ErrorMessage);
             return false;
+        }
+
+        public static bool GetToken(string username, string password)
+        {
+            var client = new RestClient(k_Url+"/connect/token");
+            var request = new RestRequest(Method.POST);
+                        request.AddHeader("content-type", "application/x-www-form-urlencoded");
+            request.AddParameter("application/x-www-form-urlencoded", "username="+username+"&password="+password+"&grant_type=password", ParameterType.RequestBody);
+            IRestResponse response = client.Execute(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                TokenResponse r = JsonConvert.DeserializeObject<TokenResponse>(response.Content);
+                s_Jwt = r.access_token;
+                return true;
+            }
+            Console.WriteLine(response.StatusCode + " - " + response.ErrorMessage);
+            return false;
+        }
+
+        public class TokenResponse
+        {
+            public string token_type { get; set; }
+            public string access_token { get; set; }
+            public int expires_in { get; set; }
         }
     }
 
