@@ -84,8 +84,13 @@ namespace PubstarsClient
                 try
                 {
                     if (!RemoteApi.SendGameResult(m_LastGameReport))
-                    {
-                        //save game to post later
+                    {                        
+                        RemoteApi.GetToken();
+                        if(!RemoteApi.SendGameResult(m_LastGameReport))
+                        {
+                            Console.WriteLine("Could not post game result");
+                        }
+
                     }
                 }
                 catch (Exception ex)

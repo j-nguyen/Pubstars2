@@ -15,7 +15,7 @@ namespace PubstarsClient
     {
         public static Dictionary<string, UserData> AllUserData = new Dictionary<string,UserData>();
 
-        private const string k_Url = "http://pubstars.us-east-2.elasticbeanstalk.com/";
+        private const string k_Url = "http://Localhost:5000/";
         private const string username = "pubstars_client";
         private const string password = "64dQz8pRGxCPMjqc";
         private static string s_Jwt = "";
@@ -25,7 +25,7 @@ namespace PubstarsClient
         /// <returns>User data</returns>
         public static bool GetUserData()
         {
-            GetToken(username, password);
+            GetToken();
             var client = new RestClient(k_Url + "UserData/GetUserData");
             var request = new RestRequest(Method.GET);
             request.AddHeader("Authorization", string.Format("Bearer {0}", s_Jwt));
@@ -45,10 +45,10 @@ namespace PubstarsClient
         /// <returns>Updated user data</returns>
         public static bool SendGameResult(RankedGameReport gameReport)
         {
-            GetToken(username, password);
-            RestClient client = new RestClient(k_Url+ "Games/PostGameResult");
+            RestClient client = new RestClient(k_Url+ "Games/ReportGame");
             var request = new RestRequest(Method.POST);
             var json = JsonConvert.SerializeObject(gameReport);
+            request.AddHeader("Authorization", string.Format("Bearer {0}", s_Jwt));
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             var response = client.Execute<Dictionary<string, UserData>>(request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -60,9 +60,9 @@ namespace PubstarsClient
             return false;
         }
 
-        public static bool GetToken(string username, string password)
+        public static bool GetToken()
         {
-            var client = new RestClient(k_Url+"/connect/token");
+            var client = new RestClient(k_Url+"connect/token");
             var request = new RestRequest(Method.POST);
                         request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddParameter("application/x-www-form-urlencoded", "username="+username+"&password="+password+"&grant_type=password", ParameterType.RequestBody);

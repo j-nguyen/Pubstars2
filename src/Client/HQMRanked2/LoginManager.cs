@@ -50,15 +50,21 @@ namespace PubstarsClient
                 else if(u.Password == password)
                 {
                     Chat.SendMessage(">> "+u.Name+" is now logged in.");
-                    LoggedInPlayers.Add(rankedPlayer);                    
+                    LoggedInPlayers.Add(rankedPlayer);
+                    return true;
                 } 
                 else
                 {
                     Chat.SendMessage(">> "+u.Name + " - wrong password.");
-                }                
-                return true;
+                }
+                return false;
             }
-            return false;
+            else
+            {
+                Chat.SendMessage("User " + player.Name + " does not exist.");
+                Chat.SendMessage("Sign up at www.hqmpubstars.com");
+                return false;
+            }            
         }
     
 
