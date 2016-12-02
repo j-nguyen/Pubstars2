@@ -15,9 +15,9 @@ namespace PubstarsClient
     {
         public static Dictionary<string, UserData> AllUserData = new Dictionary<string,UserData>();
 
-        private const string k_Url = "http://Localhost:5000/";
-        private const string username = "pubstars_client";
-        private const string password = "64dQz8pRGxCPMjqc";
+        private const string k_Url = "http://www.hqmpubstars.com/";
+        private const string username = "";
+        private const string password = "";
         private static string s_Jwt = "";
         /// <summary>
         /// Initialized user data from server

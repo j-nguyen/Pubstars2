@@ -14,10 +14,10 @@ namespace PubstarsClient
         public static void Main(string[] args)
         {
             Console.WriteLine("Reading user data...");
-            while (!RemoteApi.GetUserData())
+            if (!RemoteApi.GetUserData())
             {
                 Console.WriteLine("Unable to fetch user data.");
-                Console.WriteLine("Retrying...");
+                Console.ReadLine();
             }
 
             Console.WriteLine("done.");
