@@ -27,7 +27,7 @@ namespace Pubstars2.Services
 
         public async Task SeedPlayers()
         {
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 2; i++)
             {
                 string name = "player" + i;         
                     
@@ -43,7 +43,7 @@ namespace Pubstars2.Services
             await CreateClientUser();
         }
 
-        private async Task CreateClientUser()
+        public async Task CreateClientUser()
         {
             IdentityRole role = new IdentityRole("client");
             if (!_rm.Roles.Contains(role))

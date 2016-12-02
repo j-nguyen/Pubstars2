@@ -38,7 +38,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         public PlayerStatsViewModel(string name, double rating, int goals, int assists, int gamesplayed, int wins)
         {
             Name = name;
-            Rating = Math.Round(rating, 2);
+            Rating = Math.Round(rating, 0);
             GamesPlayed = gamesplayed;
             Wins = wins;
             Losses = gamesplayed - wins;

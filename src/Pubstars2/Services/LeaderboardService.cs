@@ -6,6 +6,7 @@ using Pubstars2.Models.PubstarsViewModels;
 using Microsoft.Extensions.Caching.Memory;
 using Pubstars2.Data;
 using PubstarsModel;
+using Microsoft.Extensions.Configuration;
 
 namespace Pubstars2.Services
 {
@@ -16,12 +17,14 @@ namespace Pubstars2.Services
         IPubstarsDb _db;
         IStatsService _statsService;
         IMemoryCache _cache;
+        private readonly int MIN_GAMES;
 
-        public LeaderboardService(IPubstarsDb context, IStatsService stats, IMemoryCache cache)
+        public LeaderboardService(IPubstarsDb context, IStatsService stats, IMemoryCache cache, IConfiguration config)
         {
             _db = context;
             _statsService = stats;
             _cache = cache;
+            MIN_GAMES = config.GetValue<int>("mingames");
         }
 
         public IEnumerable<PlayerStatsViewModel> GetLeaderboard()
@@ -33,10 +36,13 @@ namespace Pubstars2.Services
                 foreach (Player player in _db.Players())
                 {
                     int gp = _statsService.GetGamesPlayed(player);
-                    int w = _statsService.GetWins(player);
-                    int g = _statsService.GetGoals(player);
-                    int a = _statsService.GetAssists(player);
-                    entries.Add(new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w));                    
+                    if(gp >= MIN_GAMES)
+                    {
+                        int w = _statsService.GetWins(player);
+                        int g = _statsService.GetGoals(player);
+                        int a = _statsService.GetAssists(player);
+                        entries.Add(new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w));
+                    }                                        
                 }
                 _cache.Set(k_LeaderboardCacheKey, entries);                
             }

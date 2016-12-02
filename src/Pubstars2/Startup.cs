@@ -108,14 +108,7 @@ namespace Pubstars2
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-#if TESTING
-
-            PubstarsSeeder s = new PubstarsSeeder(app.ApplicationServices.GetService<UserManager<ApplicationUser>>(), Configuration, app.ApplicationServices.GetService<RoleManager<IdentityRole>>());
-            s.SeedPlayers();
-           
-#endif
+            });                    
         }
     }
 }

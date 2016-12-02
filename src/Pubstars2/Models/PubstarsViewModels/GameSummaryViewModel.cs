@@ -32,8 +32,8 @@ namespace Pubstars2.Models.PubstarsViewModels
                     name = stats.Player.Name,
                     goals = stats.Goals.ToString(),
                     assists = stats.Assists.ToString(),
-                    ratingChange = Math.Round(newRatings[stats.Player].Mean - stats.RatingMean, 2).ToString(),
-                    newRating = Math.Round(newRatings[stats.Player].Mean, 2).ToString()
+                    ratingChange = Math.Round(newRatings[stats.Player].Mean - stats.RatingMean, 0).ToString(),
+                    newRating = Math.Round(newRatings[stats.Player].Mean, 0).ToString()
                 };
 
                 if (stats.Team == HqmTeam.red)
