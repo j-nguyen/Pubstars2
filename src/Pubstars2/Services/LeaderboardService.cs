@@ -17,7 +17,7 @@ namespace Pubstars2.Services
         IPubstarsDb _db;
         IStatsService _statsService;
         IMemoryCache _cache;
-        private readonly int MIN_GAMES;
+        public static int MIN_GAMES;
 
         public LeaderboardService(IPubstarsDb context, IStatsService stats, IMemoryCache cache, IConfiguration config)
         {

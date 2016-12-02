@@ -1,10 +1,12 @@
 @model IEnumerable<Pubstars2.Models.PubstarsViewModels.PlayerStatsViewModel>
+@using Pubstars2.Services;
 
 @{
     ViewData["Title"] = "Leaderboard";
 }
 
 <h1 align="center">Leaderboard</h1>
+<p align="center">Minimum Games: @LeaderboardService.MIN_GAMES</p>
 <br />
 
 
