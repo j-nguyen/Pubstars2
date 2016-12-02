@@ -60,6 +60,13 @@ namespace PubstarsClient
                             Chat.SendMessage("MERCY_RULE_DIFF set to " + num);
                         }
                     }     
+                    else if (cmd.Cmd == "getusers")
+                    {
+                        if(RemoteApi.GetUserData())
+                            Chat.SendMessage("Updated UserData");
+                        else
+                            Chat.SendMessage("failed to update UserData");
+                    }
                 }              
             }
         }

@@ -23,7 +23,7 @@ namespace PubstarsClient
             Console.WriteLine("done.");
 
             Console.WriteLine("Looking for server...");
-            while (!MemoryEditor.Init()) { }
+            while (!MemoryEditor.Init("pubstars2")) { }
             Console.WriteLine("Server found.");
             
             
@@ -77,7 +77,11 @@ namespace PubstarsClient
                 Command cmd = cmdListener.NewCommand();
                 if (cmd != null)
                 {
-                    LoginManager.HandleNewLogins(cmd);
+                    if(!game.InProgress)
+                    {
+                        LoginManager.HandleNewLogins(cmd);
+                    }
+                    
                     UtilCommandHandler.HandleUtilCommand(cmd);
 
                     if (cmd.Cmd == "start" && cmd.Sender.IsAdmin)
@@ -103,7 +107,7 @@ namespace PubstarsClient
         {
             Chat.SendMessage("             Logged in players: "+LoginManager.LoggedInPlayers.Count + " / "+Util.MIN_PLAYER_COUNT);
             Chat.SendMessage("        Type /join <yourpassword> to play");
-            Chat.SendMessage("        Create an account at r/hqmgames "); 
+            Chat.SendMessage("        Create an account at hqmpubstars.com "); 
         }
 
         static void CrashReporter(object sender, UnhandledExceptionEventArgs args)
