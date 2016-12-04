@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubstarsClient", "PubstarsC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HQMEditorDedicated", "..\HQMEditorDedicated\HQMEditorDedicated\HQMEditorDedicated.csproj", "{AA3CF9DB-4D4E-4298-9394-F21E0A87E03D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubstarsGameServer", "..\PubstarsGameServer\PubstarsGameServer.csproj", "{38AF201B-8301-463B-93D0-DAD4819BD19D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AA3CF9DB-4D4E-4298-9394-F21E0A87E03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA3CF9DB-4D4E-4298-9394-F21E0A87E03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA3CF9DB-4D4E-4298-9394-F21E0A87E03D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38AF201B-8301-463B-93D0-DAD4819BD19D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38AF201B-8301-463B-93D0-DAD4819BD19D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38AF201B-8301-463B-93D0-DAD4819BD19D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38AF201B-8301-463B-93D0-DAD4819BD19D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
