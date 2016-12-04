@@ -23,7 +23,7 @@ namespace Pubstars2
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(env.ContentRootPath);
-            builder.AddJsonFile("appsettings.json");
+            builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange:true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -32,7 +32,7 @@ namespace Pubstars2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>( o=>
                 {
@@ -74,6 +74,7 @@ namespace Pubstars2
             services.AddScoped<IPubstarsDb, PubstarsSqlDb>();
             services.AddScoped<ILeaderboardService, LeaderboardService>();
             services.AddSingleton(Configuration);
+         
 
             services.AddBootstrapPagerGenerator(options =>
             {

@@ -10,7 +10,7 @@
 <br />
 
 
-<table class="table table-hover table-cursor">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
@@ -45,8 +45,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Assists)
-            </th>
-            <th></th>
+            </th>          
         </tr>
     </thead>
     <tbody>
@@ -58,7 +57,7 @@
                 @(i+1)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <b>@Html.DisplayFor(modelItem => item.Name)</b>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)
