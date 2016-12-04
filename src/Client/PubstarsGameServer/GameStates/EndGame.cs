@@ -29,11 +29,7 @@ namespace PubstarsGameServer.GameStates
             Chat.SendMessage("Game over. Recording stats...");
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);
-
-            var timeUtc = DateTime.UtcNow;
-            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            DateTime easternTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);            
 
             RankedGameReport report = new RankedGameReport()
             {
@@ -41,7 +37,7 @@ namespace PubstarsGameServer.GameStates
                 BlueScore = blueScore,
                 WinningTeam = redScore > blueScore ? "Red" : "Blue",
                 PlayerStats = stats,
-                Date = easternTime
+                Date = DateTime.UtcNow
             };
 
             if (!await RemoteApi.SendGameResult(report))
