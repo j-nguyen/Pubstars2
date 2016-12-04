@@ -21,7 +21,7 @@ namespace PubstarsGameServer.GameStates
 
         public Task OnEnter()
         {
-            Console.WriteLine("GameSetu  - OnEnter");
+            Console.WriteLine("GameSetup - OnEnter");
 
             CreateTeams();
             return Task.FromResult<object>(null);
@@ -35,7 +35,7 @@ namespace PubstarsGameServer.GameStates
 
         public Task OnExit()
         {
-            Console.WriteLine("GameSetup  - OnExit");
+            Console.WriteLine("GameSetup - OnExit");
             return Task.FromResult<object>(null);
         }
 

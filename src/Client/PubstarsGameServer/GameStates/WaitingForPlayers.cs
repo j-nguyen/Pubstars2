@@ -11,7 +11,7 @@ namespace PubstarsGameServer.GameStates
 {
     class WaitingForPlayers : IState
     {
-        private const int MIN_PLAYERS = 2;
+        private const int MIN_PLAYERS = 0;
 
         private LoginManager m_LoginManager = new LoginManager();
         private CommandListener m_CommandListener;

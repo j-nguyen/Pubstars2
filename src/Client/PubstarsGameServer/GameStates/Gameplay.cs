@@ -26,7 +26,7 @@ namespace PubstarsGameServer.GameStates
                     GameInfo.GameTime = new TimeSpan(0, 0, 0, 1);
                 }
             }
-            return GameInfo.IsGameOver;
+            return true;
         }
 
         public Task OnEnter()

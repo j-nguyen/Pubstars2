@@ -32,7 +32,8 @@ namespace PubstarsGameServer
                 sm.AddState(new GameSetup(context, lastGamePlayers));
                 sm.AddState(new Gameplay());
                 sm.AddState(new EndGame());
-                while(sm.Update().Result);
+
+                while(!sm.Update().Result);
             }            
         }
     }

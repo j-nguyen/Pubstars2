@@ -23,18 +23,18 @@ namespace PubstarsGameServer
             m_GlobalStates.Add(state);
         }
 
-        public async Task Init(IState state)
+        public Task Init(IState state)
         {            
             m_States = new Queue<IState>();
             AddState(state);          
             m_GlobalStates.ForEach(x => x.OnEnter());
-            await AdvanceState();
+            return Task.FromResult<object>(null);
         }
 
         public async Task<bool> Update()
         {
             m_GlobalStates.ForEach(x => x.Execute());
-            if(await Execute())
+            if(m_CurrentState == null || await Execute())
             {
                 return await AdvanceState();
             }
@@ -52,8 +52,9 @@ namespace PubstarsGameServer
                 return false;
             }
             else
-            {
+            {                
                 Console.WriteLine("StateMachine: Done at " + m_CurrentState);
+                m_CurrentState = null;
                 return true;
             }                           
         }
