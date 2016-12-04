@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HQMEditorDedicated;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,24 @@ namespace PubstarsGameServer.GameStates
 {
     class Gameplay : IState
     {
-        public Task<bool> Execute()
+        bool m_Mercy = false;
+
+        public async Task<bool> Execute()
         {
-            Console.WriteLine("Gameplay - Execute");
-            return Task.FromResult<bool>(true);
+            await Task.Delay(100);
+            if(!m_Mercy)
+            {
+                if(CheckMercy())
+                {
+                    m_Mercy = true;
+                    Chat.SendMessage("---------------------------------------------------");
+                    Chat.SendMessage("  Game is ending due to mercy rule.");
+                    Chat.SendMessage("---------------------------------------------------");
+                    GameInfo.Period = 3;
+                    GameInfo.GameTime = new TimeSpan(0, 0, 0, 1);
+                }
+            }
+            return GameInfo.IsGameOver;
         }
 
         public Task OnEnter()
@@ -24,6 +39,14 @@ namespace PubstarsGameServer.GameStates
         {
             Console.WriteLine("Gameplay - OnExit");
             return Task.FromResult<object>(null);
+        }
+
+        private bool CheckMercy()
+        {
+            byte[] score = MemoryEditor.ReadBytes(0x018931F8, 8);
+            int redScore = score[0];
+            int blueScore = score[4];
+            return (Math.Abs(redScore - blueScore) >= 1);
         }
     }
 }

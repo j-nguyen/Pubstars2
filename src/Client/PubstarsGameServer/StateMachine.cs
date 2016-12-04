@@ -38,7 +38,7 @@ namespace PubstarsGameServer
             {
                 return await AdvanceState();
             }
-            return true;
+            return false;
         }
 
         private async Task<bool> AdvanceState()
@@ -49,12 +49,12 @@ namespace PubstarsGameServer
             {
                 m_CurrentState = m_States.Dequeue();
                 await m_CurrentState.OnEnter();
-                return true;
+                return false;
             }
             else
             {
                 Console.WriteLine("StateMachine: Done at " + m_CurrentState);
-                return false;
+                return true;
             }                           
         }
 

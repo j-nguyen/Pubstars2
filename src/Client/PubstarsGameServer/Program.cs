@@ -23,7 +23,7 @@ namespace PubstarsGameServer
 
             while (true)
             {
-                IEnumerable<string> lastGamePlayers = context?.Players.Select(x => x.Name);
+                IEnumerable<string> lastGamePlayers = context?.Players.Select(x => x.Name) ?? new List<string>();
 
                 context = new GameContext();
                 Warden warden = new Warden(context);
