@@ -11,7 +11,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>JS Bin</title>
-    <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 </head>
 <body>
     <h1>@Html.DisplayFor(model => model.PlayerStats.Name)</h1>
@@ -78,59 +79,53 @@
     </table>
     <br />
     <div>
-        <h3 >Rating Chart</h3>
-
-        <svg id="lineChart" width="960" height="500"></svg>
-        <style>
-            .line {
-                fill: none;
-                stroke: steelblue;
-                stroke-width: 2px;
-            }
-        </style>
+        <h3 >Rating Chart</h3>   
+        <canvas id="myChart" width="400" height="200"></canvas>     
         <script>
             var url = "GetEloGraphJson/username?=";
             var name = "@Model.PlayerStats.Name";
+            var ctx = document.getElementById("myChart").getContext("2d");
             url = url.concat(name);
-            d3.json(url, function (error, result) {
-                var data = result;
-
-                var svg = d3.select("#lineChart"),
-                    margin = { top: 20, right: 20, bottom: 30, left: 50 },
-                    width = +svg.attr("width") - margin.left - margin.right,
-                    height = +svg.attr("height") - margin.top - margin.bottom,
-                    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                var x = d3.scaleLinear()
-                .range([0, width]);
-
-                var y = d3.scaleLinear()
-                .range([height, 0]);
-
-                x.domain(d3.extent(data, function (d, i) { return i; }));
-                y.domain(d3.extent(data, function (d) { return d; }));
-
-
-                var line = d3.line()
-                    .x(function (d, i) { return x(i); })
-                    .y(function (d) { return y(d); });
-
-                svg.append("g")
-                    .attr("class", "axis axis--x")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisTop(x));
-
-                svg.append("g")
-                    .attr("class", "axis axis--y")
-                    .call(d3.axisRight(y))
-
-                svg.append("path")
-                    .datum(data)
-                    .attr("class", "line")
-                    .attr("d", line);
+            var json = $.ajax({
+                url: encodeURI(url),
+                dataType: 'json'
+            }).done(function (results) {
+                var data = {
+                    labels: Array.from(Array(results.length).keys()).map(x=>++x),
+                    datasets: [
+                        {
+                            label: "Rating",
+                            fill: false,
+                            lineTension: 0.1,
+                            backgroundColor: "rgba(75,192,192,0.4)",
+                            borderColor: "rgba(75,192,192,1)",
+                            borderCapStyle: 'butt',
+                            borderDash: [],
+                            borderDashOffset: 0.0,
+                            borderJoinStyle: 'miter',
+                            pointBorderColor: "rgba(75,192,192,1)",
+                            pointBackgroundColor: "#fff",
+                            pointBorderWidth: 1,
+                            pointHoverRadius: 5,
+                            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                            pointHoverBorderColor: "rgba(220,220,220,1)",
+                            pointHoverBorderWidth: 2,
+                            pointRadius: 1,
+                            pointHitRadius: 10,
+                            data: results,
+                            spanGaps: false,
+                            scaleStartValue: 0
+                        }
+                    ]
+                };
+               
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: data,                 
+                    
+                });
             });
-
-
+            
         </script>
     </div>
 </body>

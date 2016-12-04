@@ -70,10 +70,11 @@ namespace Pubstars2.Controllers
             }
         }
 
-        public JsonResult GetEloGraphJson(string Username)
+        public JsonResult GetEloGraphJson(string username)
         {
+            username = WebUtility.UrlDecode(username);
             var elos = _db.PlayerGameStats()
-                .Where(x => x.Player.Name == Username)?
+                .Where(x => x.Player.Name == username)?
                 .OrderBy(x => x.Game.date)
                 .Select(x => x.RatingMean)
                 .ToArray();           

@@ -23,7 +23,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         [Display(Name = "Win%")]
         public double WinPercentage { get; set; }
 
-        [Display(Name="PPG")]
+        [Display(Name="P/G")]
         public double PointsPerGame { get; set; }
 
         [Display(Name="PTS")]
@@ -42,7 +42,7 @@ namespace Pubstars2.Models.PubstarsViewModels
             GamesPlayed = gamesplayed;
             Wins = wins;
             Losses = gamesplayed - wins;
-            WinPercentage = Math.Round(wins / (double)gamesplayed, 3);
+            WinPercentage = Math.Round(wins / (double)gamesplayed, 3)*100;
             PointsPerGame = Math.Round((goals + assists) / (double)gamesplayed, 2);
             Points = goals + assists;
             Goals = goals;
