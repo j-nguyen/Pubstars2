@@ -10,7 +10,6 @@ namespace PubstarsGameServer.Model
     class GameContext
     {
         public List<RankedPlayer> LoggedInPlayers = new List<RankedPlayer>();
-        public List<RankedPlayer> Players = new List<RankedPlayer>();
 
         public List<string> RedTeam = new List<string>();
         public List<string> BlueTeam = new List<string>();
@@ -19,12 +18,6 @@ namespace PubstarsGameServer.Model
         {
             RankedPlayer p = LoggedInPlayers.FirstOrDefault(x => x.Name == name);
             return (p != null && slot == p.PlayerStruct.Slot);
-        }
-
-        public void RemoveLoggedOutPlayers()
-        {
-            byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, 20 * MemoryAddresses.PLAYER_STRUCT_SIZE);
-            LoggedInPlayers.RemoveAll(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0);
         }
     }
 }

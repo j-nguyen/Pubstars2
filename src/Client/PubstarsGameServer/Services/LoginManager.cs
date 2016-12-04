@@ -28,7 +28,7 @@ namespace PubstarsGameServer.Services
                 {
                     return new LoginResult()
                     {
-                        Result = user.Name + " - logged in successfully",
+                        Result = user.Name + " - logged in",
                         RankedPlayer = new RankedPlayer(user.Name, player.IPAddress, player, user.Rating)
                     };
                 }
@@ -47,7 +47,7 @@ namespace PubstarsGameServer.Services
                 {                    
                     return new LoginResult()
                     {
-                        Result =  player.Name+ " does not exist."
+                        Result =  player.Name+ " does not exist"
                     };
                 }
                 else

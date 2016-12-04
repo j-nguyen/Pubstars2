@@ -11,12 +11,7 @@ namespace PubstarsGameServer.GameStates
 {
     class WaitingForPlayers : IState
     {
-        private const int MIN_PLAYERS = 0;
-
-        private LoginManager m_LoginManager = new LoginManager();
-        private CommandListener m_CommandListener;
-
-        private List<Task<LoginManager.LoginResult>> m_LoginTasks = new List<Task<LoginManager.LoginResult>>();
+        private const int MIN_PLAYERS = 2;       
 
         private GameContext m_Context; 
         
@@ -25,24 +20,14 @@ namespace PubstarsGameServer.GameStates
             m_Context = context;
         } 
 
-
-        public async Task OnEnter()
-        {
-            m_CommandListener = new CommandListener(new Dictionary<string, Action<Command>>()
-            {
-                { "join", Login }
-            });
-
+        public Task OnEnter()
+        {           
             Console.WriteLine("WaitingForPlayers - OnEnter");
-            if (await m_LoginManager.Init())
-            {
-                Console.WriteLine("LoginManager initialized successfully.");
-            }
-            else
-            {
-                Console.WriteLine("LoginManager failed to initialize.");
-                Console.ReadLine();
-            }
+            Chat.SendMessage("---------------------------------------------------");
+            Chat.SendMessage("   All players have been logged out.");
+            Chat.SendMessage(" '/join mypassword' to join the next game.");
+            Chat.SendMessage("---------------------------------------------------");
+            return Task.FromResult<object>(null);
         }
 
         private DateTime m_MinPlayersReachedTime = DateTime.MaxValue;
@@ -50,10 +35,6 @@ namespace PubstarsGameServer.GameStates
 
         public async Task<bool> Execute()
         {
-            m_Context.RemoveLoggedOutPlayers();
-            m_CommandListener.Listen();
-            ResolveLoginTasks();
-
             if(m_Context.LoggedInPlayers.Count >= MIN_PLAYERS && !m_MinPlayersReached)
             {
                 Console.WriteLine("Required player count reached");
@@ -84,7 +65,7 @@ namespace PubstarsGameServer.GameStates
             if(m_MinPlayersReached && DateTime.Now >= m_MinPlayersReachedTime + new TimeSpan(0,0,10))
             {
                 Chat.SendMessage("---------------------------------------------------");
-                Chat.SendMessage("Logins are now closed. Game Starting...");
+                Chat.SendMessage("     Game Starting...");
                 Chat.SendMessage("---------------------------------------------------");
                 return true;
             }
@@ -97,33 +78,6 @@ namespace PubstarsGameServer.GameStates
             return Task.FromResult<object>(null);
         }
 
-        private void Login(Command cmd)
-        {
-            if (cmd.Args.Count() > 0)
-            {
-                if(m_Context.LoggedInPlayers.Select(x=>x.Name).Contains(cmd.Sender.Name))
-                {
-                    Chat.SendMessage(">> " + cmd.Sender.Name + " is already logged in");
-                    return;
-                }
-                string pw = cmd.Args[0];
-                Task<LoginManager.LoginResult> loginTask = m_LoginManager.Login(cmd.Sender, pw);
-                m_LoginTasks.Add(loginTask);
-            }
-        }
-
-        private void ResolveLoginTasks()
-        {
-            foreach (Task<LoginManager.LoginResult> t in m_LoginTasks.Where(x=>x.IsCompleted))
-            {               
-                LoginManager.LoginResult result = t.Result;
-                Chat.SendMessage(">> " + result.Result);
-                if (result.RankedPlayer != null)
-                {
-                    m_Context.LoggedInPlayers.Add(result.RankedPlayer);
-                }                
-            }
-            m_LoginTasks.RemoveAll(x => x.IsCompleted);
-        }
+        
     }
 }

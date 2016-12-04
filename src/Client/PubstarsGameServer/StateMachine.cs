@@ -10,30 +10,22 @@ namespace PubstarsGameServer
     public class StateMachine
     {
         private Queue<IState> m_States = new Queue<IState>();
-        private List<IState> m_GlobalStates = new List<IState>();
         private IState m_CurrentState;
 
         public void AddState(IState state)
         {
             m_States.Enqueue(state);
-        }        
-
-        public void AddGlobalState(IState state)
-        {
-            m_GlobalStates.Add(state);
-        }
+        }       
 
         public Task Init(IState state)
         {            
             m_States = new Queue<IState>();
-            AddState(state);          
-            m_GlobalStates.ForEach(x => x.OnEnter());
+            AddState(state);         
             return Task.FromResult<object>(null);
         }
 
         public async Task<bool> Update()
         {
-            m_GlobalStates.ForEach(x => x.Execute());
             if(m_CurrentState == null || await Execute())
             {
                 return await AdvanceState();

@@ -1,4 +1,5 @@
 ﻿using HQMEditorDedicated;
+using PubstarsGameServer.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ namespace PubstarsGameServer.GameStates
 
         public async Task<bool> Execute()
         {
-            await Task.Delay(100);
             if(!m_Mercy)
             {
                 if(CheckMercy())

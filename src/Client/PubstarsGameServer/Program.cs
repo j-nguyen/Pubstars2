@@ -1,4 +1,5 @@
-﻿using PubstarsGameServer.GameStates;
+﻿using HQMEditorDedicated;
+using PubstarsGameServer.GameStates;
 using PubstarsGameServer.Model;
 using PubstarsGameServer.Services;
 using System;
@@ -12,28 +13,33 @@ namespace PubstarsGameServer
     class Program
     {
         static void Main(string[] args)
-        {
+        {           
+            GameContext context = null;
             StateMachine sm = new StateMachine();
-
-            //add global states
 
             sm.Init(new Init()).Wait();
 
-            GameContext context = null;
-
             while (true)
             {
-                IEnumerable<string> lastGamePlayers = context?.Players.Select(x => x.Name) ?? new List<string>();
+                IEnumerable<string> lastGamePlayers = context?.RedTeam.Concat(context?.BlueTeam) ?? new List<string>();
 
-                context = new GameContext();
+                context = new GameContext();               
+
                 Warden warden = new Warden(context);
+                LoginHandler loginHandler = new LoginHandler(context);
+                
+                loginHandler.Init().Wait();
 
                 sm.AddState(new WaitingForPlayers(context));
                 sm.AddState(new GameSetup(context, lastGamePlayers));
                 sm.AddState(new Gameplay());
-                sm.AddState(new EndGame());
+                sm.AddState(new EndGame(context));
 
-                while(!sm.Update().Result);
+                while (!sm.Update().Result)
+                {
+                    Task.Delay(100).Wait();
+                    loginHandler.HandleLogins();
+                };
             }            
         }
     }
