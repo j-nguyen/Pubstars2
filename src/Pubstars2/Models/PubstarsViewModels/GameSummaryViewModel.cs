@@ -45,9 +45,14 @@ namespace Pubstars2.Models.PubstarsViewModels
                     bluestats.Add(vm);
                 }
             }
+
+
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime easternTime = TimeZoneInfo.ConvertTime(game.date, TimeZoneInfo.Utc, easternZone);
+
             redstats = redstats.OrderByDescending(x => x.newRating).ToList();
             bluestats = bluestats.OrderByDescending(x => x.newRating).ToList();
-            time = game.date;
+            time = easternTime;
             redScore = game.redScore;
             blueScore = game.blueScore;
             redStatLines = redstats;

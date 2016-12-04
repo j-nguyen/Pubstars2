@@ -6,7 +6,7 @@
     public class GameInfo
     {
         private const double DefaultBeta = DefaultInitialMean/6.0;
-        private const double DefaultDrawProbability = 0.10;
+        private const double DefaultDrawProbability = 0;
         private const double DefaultDynamicsFactor = DefaultInitialMean/300.0;
         private const double DefaultInitialMean = 2500;
         private const double DefaultInitialStandardDeviation = DefaultInitialMean/3.0;
