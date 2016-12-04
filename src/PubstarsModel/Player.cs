@@ -19,6 +19,13 @@ namespace PubstarsModel
 
         public Rating Rating { get; set; }
         
+        public string RatingString
+        {
+            get
+            {
+                return Math.Round(Rating.Mean, 0).ToString();
+            }
+        }
     }
 
     public class Rating

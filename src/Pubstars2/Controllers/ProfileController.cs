@@ -7,6 +7,7 @@ using Pubstars2.Models.PubstarsViewModels;
 using Pubstars2.Services;
 using PubstarsModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Pubstars2.Controllers
@@ -26,7 +27,8 @@ namespace Pubstars2.Controllers
 
         [Route("Profile/{username}")]
         public IActionResult Player(string username)
-        {            
+        {
+            username = WebUtility.UrlDecode(username);
             Player player = _db.UsersWithPlayer().FirstOrDefault(x => x.UserName == username)?.PlayerStats;
             if (player == null)
             {
@@ -39,7 +41,7 @@ namespace Pubstars2.Controllers
                 int w = _stats.GetWins(player);
                 int g = _stats.GetGoals(player);
                 int a = _stats.GetAssists(player);
-                me.PlayerStats = new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w);
+                me.PlayerStats = new PlayerStatsViewModel(player.Name, player.RatingString, g, a, gp, w);
                 return View(me);
             }            
         }
@@ -63,7 +65,7 @@ namespace Pubstars2.Controllers
                 int w = _stats.GetWins(player);
                 int g = _stats.GetGoals(player);
                 int a = _stats.GetAssists(player);
-                me.PlayerStats = new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w);
+                me.PlayerStats = new PlayerStatsViewModel(player.Name, player.RatingString, g, a, gp, w);
                 return View(me);
             }
         }

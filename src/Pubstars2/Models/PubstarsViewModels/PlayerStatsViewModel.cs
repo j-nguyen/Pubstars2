@@ -9,7 +9,7 @@ namespace Pubstars2.Models.PubstarsViewModels
         public string Name { get; set; }
 
         [Display(Name = "Rating")]
-        public double Rating { get; set; }
+        public string Rating { get; set; }
 
         [Display(Name = "GP")]
         public int GamesPlayed { get; set; }
@@ -35,10 +35,10 @@ namespace Pubstars2.Models.PubstarsViewModels
         [Display(Name="A")]
         public int Assists { get; set; }
 
-        public PlayerStatsViewModel(string name, double rating, int goals, int assists, int gamesplayed, int wins)
+        public PlayerStatsViewModel(string name, string rating, int goals, int assists, int gamesplayed, int wins)
         {
             Name = name;
-            Rating = Math.Round(rating, 0);
+            Rating = rating;
             GamesPlayed = gamesplayed;
             Wins = wins;
             Losses = gamesplayed - wins;

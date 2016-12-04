@@ -41,7 +41,7 @@ namespace Pubstars2.Services
                         int w = _statsService.GetWins(player);
                         int g = _statsService.GetGoals(player);
                         int a = _statsService.GetAssists(player);
-                        entries.Add(new PlayerStatsViewModel(player.Name, player.Rating.Mean, g, a, gp, w));
+                        entries.Add(new PlayerStatsViewModel(player.Name, player.RatingString, g, a, gp, w));
                     }                                        
                 }
                 _cache.Set(k_LeaderboardCacheKey, entries);                
