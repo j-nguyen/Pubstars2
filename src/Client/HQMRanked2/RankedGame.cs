@@ -68,15 +68,19 @@ namespace PubstarsClient
             Chat.SendMessage("Game over. Recording stats...");
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);           
-
+            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(RedTeam, BlueTeam);    
+            
+            var timeUtc = DateTime.UtcNow;
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime easternTime = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+            
             m_LastGameReport = new RankedGameReport()
             {
                 RedScore = redScore,
                 BlueScore = blueScore,
                 WinningTeam = redScore > blueScore ? "Red" : "Blue",
                 PlayerStats = stats,
-                Date = DateTime.UtcNow       
+                Date = easternTime      
             };
 
             if(record)
