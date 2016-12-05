@@ -9,11 +9,11 @@
 <div align="center"><pager /></div>
 @foreach(var game in Model)
 {
-    <table class="table">
+    <table class="table table-bordered table-condensed table-striped">
         <thead>
             <tr>
                 <td colspan="10" align="center">
-                    <font color="black" size="5">@Html.DisplayFor(modelitem => game.time)</font>
+                    <font color="black" size="5">@Html.DisplayFor(modelitem => game.Time)</font>
                 </td>
             <tr>
                 <td colspan="5" bgcolor="#bf2222" align="center">
@@ -27,12 +27,22 @@
         <tbody>
             <tr>
                 <td colspan="5" align="center">
-                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.redScore)</font>
+                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.RedScore)</font>
                 </td>
                 <td colspan="5" align="center">
-                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.blueScore)</font>
+                    <font color="black" size="32">@Html.DisplayFor(modelitem => game.BlueScore)</font>
                 </td>
             </tr>
+            <tr>
+                <td colspan="5" align="center">
+                    <p><b>Average Rating: </b>@Html.DisplayFor(modelitem => game.RedAvgRating)<p>
+                </td>
+                <td colspan="5" align="center">
+                <p><b>Average Rating: </b>@Html.DisplayFor(modelitem => game.BlueAvgRating)
+                <p>
+                    </td>
+</tr>
+            
             <tr>
                 <th>
                     NAME
@@ -65,41 +75,41 @@
                     NEW RATING
                 </th>
             </tr>
-            @for (int j = 0; j < Math.Min(game.redStatLines.Count, game.blueStatLines.Count); j++) //todo: replace with player stat lines
+            @for (int j = 0; j < Math.Min(game.RedStatLines.Count, game.BlueStatLines.Count); j++) //todo: replace with player stat lines
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelitem => game.redStatLines[j].name)
+                        @Html.DisplayFor(modelitem => game.RedStatLines[j].name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem => game.redStatLines[j].goals)
+                        @Html.DisplayFor(modelitem => game.RedStatLines[j].goals)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem => game.redStatLines[j].assists)
+                        @Html.DisplayFor(modelitem => game.RedStatLines[j].assists)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem => game.redStatLines[j].ratingChange)
+                        @Html.DisplayFor(modelitem => game.RedStatLines[j].ratingChange)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem => game.redStatLines[j].newRating)
+                        @Html.DisplayFor(modelitem => game.RedStatLines[j].newRating)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelitem => game.blueStatLines[j].name)
+                        @Html.DisplayFor(modelitem => game.BlueStatLines[j].name)
                     </td>                                  
                     <td>                                   
-                        @Html.DisplayFor(modelitem => game.blueStatLines[j].goals)
+                        @Html.DisplayFor(modelitem => game.BlueStatLines[j].goals)
                     </td>                                  
                     <td>                                   
-                        @Html.DisplayFor(modelitem => game.blueStatLines[j].assists)
+                        @Html.DisplayFor(modelitem => game.BlueStatLines[j].assists)
                     </td>                                  
                     <td>                                   
-                        @Html.DisplayFor(modelitem => game.blueStatLines[j].ratingChange)
+                        @Html.DisplayFor(modelitem => game.BlueStatLines[j].ratingChange)
                     </td>                                  
                     <td>                                   
-                        @Html.DisplayFor(modelitem => game.blueStatLines[j].newRating)
+                        @Html.DisplayFor(modelitem => game.BlueStatLines[j].newRating)
                     </td>
                 </tr>
-            }
+            }            
         </tbody>
     </table><br />
 }

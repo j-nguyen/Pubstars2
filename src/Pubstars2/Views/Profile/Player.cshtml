@@ -18,7 +18,7 @@
     <h1>@Html.DisplayFor(model => model.PlayerStats.Name)</h1>
     <h3>Rating: @Html.DisplayFor(model => model.PlayerStats.Rating)</h3>
     <br />
-    <table class="table">
+    <table class="table table-bordered table-condensed">
         <thead>
             <tr>               
                 <th>
@@ -45,7 +45,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.PlayerStats.Assists)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -79,7 +78,6 @@
     </table>
     <br />
     <div>
-        <h3 >Rating Chart</h3>   
         <canvas id="myChart" width="400" height="200"></canvas>     
         <script>
             var url = "GetEloGraphJson/username?=";

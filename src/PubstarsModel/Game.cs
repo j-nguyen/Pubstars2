@@ -24,6 +24,12 @@ namespace PubstarsModel
             }            
         }
 
+        public double AvgRating(HqmTeam team)
+        {
+            var teamStats = playerStats.Where(x => x.Team == team);
+            return teamStats.Select(x => x.RatingMean).Sum() / teamStats.Count();
+        }
+
         public IDictionary<Player, Rating> GetNewRatings()
         {
             var redTeam = new Team<Player>();

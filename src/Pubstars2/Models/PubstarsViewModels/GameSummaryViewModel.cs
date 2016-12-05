@@ -9,16 +9,20 @@ namespace Pubstars2.Models.PubstarsViewModels
     public class GameSummaryViewModel
     {
         [Display(Name="Time")]
-        public DateTime time { get; set; }
+        public DateTime Time { get; set; }
 
         [Display(Name = "Red Score")]
-        public int redScore { get; set; }
+        public int RedScore { get; set; }
 
         [Display(Name = "Blue Score")]
-        public int blueScore { get; set; }
+        public int BlueScore { get; set; }
 
-        public List<StatlineViewModel> redStatLines { get; set; }
-        public List<StatlineViewModel> blueStatLines { get; set; }
+        public double BlueAvgRating { get; set; }
+        public double RedAvgRating { get; set; }
+        
+
+        public List<StatlineViewModel> RedStatLines { get; set; }
+        public List<StatlineViewModel> BlueStatLines { get; set; }
 
         public GameSummaryViewModel(Game game)
         {
@@ -46,17 +50,19 @@ namespace Pubstars2.Models.PubstarsViewModels
                 }
             }
 
-
             TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             DateTime easternTime = TimeZoneInfo.ConvertTime(game.date, TimeZoneInfo.Utc, easternZone);
 
             redstats = redstats.OrderByDescending(x => x.newRating).ToList();
             bluestats = bluestats.OrderByDescending(x => x.newRating).ToList();
-            time = easternTime;
-            redScore = game.redScore;
-            blueScore = game.blueScore;
-            redStatLines = redstats;
-            blueStatLines = bluestats;
+            Time = easternTime;
+            RedScore = game.redScore;
+            BlueScore = game.blueScore;
+            RedStatLines = redstats;
+            BlueStatLines = bluestats;
+
+            BlueAvgRating = Math.Round(game.AvgRating(HqmTeam.blue));
+            RedAvgRating = Math.Round(game.AvgRating(HqmTeam.red));
         }
 
     }

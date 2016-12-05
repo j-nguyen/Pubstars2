@@ -36,7 +36,7 @@ namespace Pubstars2.Controllers
             {                
                 gameSummaries.Add(new GameSummaryViewModel(game));
             }
-            var viewData = gameSummaries.OrderByDescending(x => x.time).ToDynamicPagedList(10, page == 0 ? 1 : page);
+            var viewData = gameSummaries.OrderByDescending(x => x.Time).ToDynamicPagedList(10, page == 0 ? 1 : page);
             return View(viewData);
         }
 
@@ -100,7 +100,7 @@ namespace Pubstars2.Controllers
             {
                 gameSummaries.Add(new GameSummaryViewModel(game));
             }
-            var viewData = gameSummaries.OrderByDescending(x => x.time);
+            var viewData = gameSummaries.OrderByDescending(x => x.Time);
             return Json(gameSummaries);
         }
   
