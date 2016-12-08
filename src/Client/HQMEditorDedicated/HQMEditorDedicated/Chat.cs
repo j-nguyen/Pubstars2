@@ -55,7 +55,7 @@ namespace HQMEditorDedicated
         public static void FlushLastCommand()
         {
             MemoryEditor.WriteInt(-1, COMMAND_SOURCE);
-            MemoryEditor.WriteString(new string(' ', 63), COMMAND);
+            MemoryEditor.WriteString(" \0", COMMAND);
         }
 
         /// <summary>

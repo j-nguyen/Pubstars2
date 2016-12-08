@@ -1,6 +1,7 @@
 ﻿using HQMEditorDedicated;
 using PubstarsDtos;
 using PubstarsGameServer.Model;
+using PubstarsGameServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace PubstarsGameServer.GameStates
     class EndGame : IState
     {
         public GameContext m_Context;
+        private Warden m_Warden;
 
-        public EndGame(GameContext context)
+        public EndGame(GameContext context, Warden warden)
         {
             m_Context = context;
+            m_Warden = warden;
         }
         public Task<bool> Execute()
         {
@@ -26,7 +29,7 @@ namespace PubstarsGameServer.GameStates
         public async Task OnEnter()
         {
             Console.WriteLine("EndGame - OnEnter");
-            Chat.SendMessage("Game over. Recording stats...");
+            
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
             List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);            
@@ -39,6 +42,9 @@ namespace PubstarsGameServer.GameStates
                 PlayerStats = stats,
                 Date = DateTime.UtcNow
             };
+            
+            Chat.SendMessage("Game over. Stats have been Recorded.");
+            m_Warden.Stop();
 
             if (!await RemoteApi.SendGameResult(report))
             {

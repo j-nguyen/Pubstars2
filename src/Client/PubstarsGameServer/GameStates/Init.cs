@@ -23,6 +23,8 @@ namespace PubstarsGameServer.GameStates
         public Task OnExit()
         {
             Console.WriteLine("Init - OnExit");
+            Chat.RecordCommandSource();
+            Chat.FlushLastCommand();
             return Task.FromResult<object>(null);
         }
     }

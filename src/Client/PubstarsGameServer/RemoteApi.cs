@@ -11,7 +11,7 @@ namespace PubstarsGameServer
 {
     public class RemoteApi
     {
-        private const string k_Url = "http://www.hqmpubstars.com/";
+        private const string k_Url = "http://localhost:5000/";
         private const string username = "pubstars_client";
         private const string password = "64dQz8pRGxCPMjqc";
         private static string s_Jwt = "";

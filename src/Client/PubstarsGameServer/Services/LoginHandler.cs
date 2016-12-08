@@ -23,7 +23,8 @@ namespace PubstarsGameServer.Services
             m_LoginTasks = new List<Task<LoginManager.LoginResult>>();
             m_CommandListener = new CommandListener(new Dictionary<string, Action<Command>>()
             {
-                { "join", Login }
+                { "join", Login },
+                { "info", Info }
             });
         }
 
@@ -45,7 +46,13 @@ namespace PubstarsGameServer.Services
             RemoveLoggedOutPlayers();
             m_CommandListener.Listen();
             ResolveLoginTasks();                        
-        }     
+        }
+
+        public void RemoveLoggedOutPlayers()
+        {
+            byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, 20 * MemoryAddresses.PLAYER_STRUCT_SIZE);
+            m_Context.LoggedInPlayers.RemoveAll(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0);
+        }
 
         private void Login(Command cmd)
         {
@@ -76,10 +83,12 @@ namespace PubstarsGameServer.Services
             m_LoginTasks.RemoveAll(x => x.IsCompleted);
         }
 
-        public void RemoveLoggedOutPlayers()
+        private void Info(Command cmd)
         {
-            byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, 20 * MemoryAddresses.PLAYER_STRUCT_SIZE);
-            m_Context.LoggedInPlayers.RemoveAll(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0);
+            Chat.SendMessage(">> "+ m_Context.LoggedInPlayers.Count + " players logged in.");
+
         }
+
+      
     }
 }

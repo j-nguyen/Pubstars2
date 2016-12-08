@@ -13,19 +13,21 @@ namespace PubstarsGameServer.GameStates
     {
         private const int MIN_PLAYERS = 2;       
 
-        private GameContext m_Context; 
-        
-        public WaitingForPlayers(GameContext context)
+        private GameContext m_Context;
+        private Warden m_Warden;
+
+        public WaitingForPlayers(GameContext context, Warden warden)
         {
             m_Context = context;
+            m_Warden = warden;
         } 
 
         public Task OnEnter()
         {           
-            Console.WriteLine("WaitingForPlayers - OnEnter");
+            Console.WriteLine("WaitingForPlayers: OnEnter");
             Chat.SendMessage("---------------------------------------------------");
             Chat.SendMessage("   All players have been logged out.");
-            Chat.SendMessage(" '/join mypassword' to join the next game.");
+            Chat.SendMessage(" '/join password' to join the next game.");
             Chat.SendMessage("---------------------------------------------------");
             return Task.FromResult<object>(null);
         }
@@ -37,14 +39,14 @@ namespace PubstarsGameServer.GameStates
         {
             if(m_Context.LoggedInPlayers.Count >= MIN_PLAYERS && !m_MinPlayersReached)
             {
-                Console.WriteLine("Required player count reached");
+                Console.WriteLine("WaitingForPlayers: Required player count reached.");
                 //reset game
                 GameInfo.IntermissionTime = 0;
                 GameInfo.IsGameOver = true;
 
                 //wait for game to reset
                 await Task.Delay(10);
-                Warden.Instance.Start();
+                m_Warden.Start();
                 Chat.SendMessage("---------------------------------------------------");
                 Chat.SendMessage("     Required player count reached.");
                 Chat.SendMessage("     Game will start in 10 seconds.");
@@ -55,9 +57,9 @@ namespace PubstarsGameServer.GameStates
 
             if(m_Context.LoggedInPlayers.Count < MIN_PLAYERS && m_MinPlayersReached)
             {
-                Console.WriteLine("Not enough players. Aborting game.");
+                Console.WriteLine("WaitingForPlayers: Not enough players. Aborting game.");
                 Chat.SendMessage("Not enough players. Aborting game.");
-                Warden.Instance.Stop();
+                m_Warden.Stop();
                 m_MinPlayersReached = false;
                 m_MinPlayersReachedTime = DateTime.MaxValue;
             }
@@ -74,7 +76,7 @@ namespace PubstarsGameServer.GameStates
 
         public Task OnExit()
         {
-            Console.WriteLine("WaitingForPlayers - OnExit");
+            Console.WriteLine("WaitingForPlayers: OnExit");
             return Task.FromResult<object>(null);
         }
 

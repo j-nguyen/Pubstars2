@@ -1,5 +1,6 @@
 ﻿using HQMEditorDedicated;
 using PubstarsGameServer.Model;
+using PubstarsGameServer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace PubstarsGameServer.GameStates
     {
         private GameContext m_Context;
         private IEnumerable<string> m_LastGamePlayers;
+      
 
         public GameSetup(GameContext context, IEnumerable<string> lastGamePlayers)
         {

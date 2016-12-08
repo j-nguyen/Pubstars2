@@ -13,9 +13,7 @@ namespace PubstarsGameServer.Services
 
         public CommandListener(Dictionary<string, Action<Command>> commands)
         {
-            m_Commands = commands;
-            Chat.RecordCommandSource();
-            Chat.FlushLastCommand();
+            m_Commands = commands;         
         }
 
         public void Listen()
