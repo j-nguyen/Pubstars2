@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PubstarsGameServer.Model
+namespace PubstarsGameServer.Data
 {
     public static class MemoryAddresses
     {

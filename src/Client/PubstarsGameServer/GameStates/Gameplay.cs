@@ -5,18 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
+using PubstarsGameServer.Data;
 
 namespace PubstarsGameServer.GameStates
 {
     class Gameplay : IState
-    {
-        bool m_Mercy = false;
+    {       
+        private bool m_Mercy = false;
 
-        public async Task<bool> Execute()
+        public Task OnEnter()
+        {
+            Console.WriteLine("Gameplay - OnEnter");
+            return Task.FromResult<object>(null);            
+        }
+
+        public Task<bool> Execute()
         {
             if(!m_Mercy)
             {
-                if(CheckMercy())
+                if(IsMercy())
                 {
                     m_Mercy = true;
                     Chat.SendMessage("---------------------------------------------------");
@@ -25,15 +33,13 @@ namespace PubstarsGameServer.GameStates
                     GameInfo.Period = 3;
                     GameInfo.GameTime = new TimeSpan(0, 0, 0, 1);
                 }
+                if(GameInfo.AfterGoalFaceoffTime > 0)
+                {
+                    Console.WriteLine("Goal scored");
+                }
             }
-            return GameInfo.IsGameOver;
-        }
-
-        public Task OnEnter()
-        {
-            Console.WriteLine("Gameplay - OnEnter");
-            return Task.FromResult<object>(null);
-        }
+            return Task.FromResult<bool>(GameInfo.IsGameOver);
+        }      
 
         public Task OnExit()
         {
@@ -41,12 +47,13 @@ namespace PubstarsGameServer.GameStates
             return Task.FromResult<object>(null);
         }
 
-        private bool CheckMercy()
+        private bool IsMercy()
         {
             byte[] score = MemoryEditor.ReadBytes(0x018931F8, 8);
             int redScore = score[0];
             int blueScore = score[4];
-            return (Math.Abs(redScore - blueScore) >= 1);
+
+            return (Math.Abs(redScore - blueScore) >= Settings.MERCY_DIFF);
         }
     }
 }

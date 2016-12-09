@@ -9,11 +9,16 @@ namespace PubstarsGameServer.Services
 {
     public class CommandListener
     {
-        private readonly Dictionary<string, Action<Command>> m_Commands;
+        private readonly Dictionary<string, Action<Command>> m_Commands = new Dictionary<string, Action<Command>>();
 
-        public CommandListener(Dictionary<string, Action<Command>> commands)
+        public void AddCommand(string trigger, Action<Command> action)
         {
-            m_Commands = commands;         
+            m_Commands.Add(trigger, action); 
+        }
+
+        public void RemoveCommand(string trigger)
+        {
+            m_Commands.Remove(trigger);
         }
 
         public void Listen()

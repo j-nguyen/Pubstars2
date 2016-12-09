@@ -1,4 +1,5 @@
 ﻿using HQMEditorDedicated;
+using PubstarsGameServer.Data;
 using PubstarsGameServer.Model;
 using PubstarsGameServer.Services;
 using System;
@@ -11,7 +12,7 @@ namespace PubstarsGameServer.GameStates
 {
     class WaitingForPlayers : IState
     {
-        private const int MIN_PLAYERS = 2;       
+              
 
         private GameContext m_Context;
         private Warden m_Warden;
@@ -37,7 +38,7 @@ namespace PubstarsGameServer.GameStates
 
         public async Task<bool> Execute()
         {
-            if(m_Context.LoggedInPlayers.Count >= MIN_PLAYERS && !m_MinPlayersReached)
+            if(m_Context.LoggedInPlayers.Count >= Settings.MIN_PLAYERS && !m_MinPlayersReached)
             {
                 Console.WriteLine("WaitingForPlayers: Required player count reached.");
                 //reset game
@@ -55,7 +56,7 @@ namespace PubstarsGameServer.GameStates
                 m_MinPlayersReachedTime = DateTime.Now;
             }
 
-            if(m_Context.LoggedInPlayers.Count < MIN_PLAYERS && m_MinPlayersReached)
+            if(m_Context.LoggedInPlayers.Count < Settings.MIN_PLAYERS && m_MinPlayersReached)
             {
                 Console.WriteLine("WaitingForPlayers: Not enough players. Aborting game.");
                 Chat.SendMessage("Not enough players. Aborting game.");

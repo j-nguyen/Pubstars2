@@ -7,22 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PubstarsGameServer.Services
+namespace PubstarsGameServer.Model
 {
-    public class LoginManager
+    public class UserData
     {
-        private Dictionary<string, UserData> m_UserInfo;
+        private Dictionary<string, UserDto> m_UserData;
 
-        public async Task<bool> Init()
+        public void Init(IEnumerable<UserDto> userData)
         {
-            m_UserInfo = await RemoteApi.GetUserData();
-            return m_UserInfo != null;
+            m_UserData = userData.ToDictionary(u => u.Name);  
         }
 
         public async Task<LoginResult> Login(Player player, string password)
         {
-            UserData user;
-            if(m_UserInfo.TryGetValue(player.Name, out user))
+            UserDto user;
+            if(m_UserData.TryGetValue(player.Name, out user))
             {
                 if (ValidPassword(user, password))
                 {
@@ -42,7 +41,7 @@ namespace PubstarsGameServer.Services
             }
             else
             {
-                UserData u = await RemoteApi.GetUserData(player.Name);
+                UserDto u = await RemoteApi.GetUserData(player.Name);
                 if(u == null)
                 {                    
                     return new LoginResult()
@@ -52,13 +51,13 @@ namespace PubstarsGameServer.Services
                 }
                 else
                 {
-                    m_UserInfo[u.Name] = u;
+                    m_UserData[u.Name] = u;
                     return await Login(player, password);
                 }               
             }
         }
 
-        private bool ValidPassword(UserData user, string pw)
+        private bool ValidPassword(UserDto user, string pw)
         {
             return user.Password == pw;
         }

@@ -32,9 +32,9 @@ namespace PubstarsGameServer.GameStates
             
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<RankedGameReport.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);            
+            List<GameDto.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);            
 
-            RankedGameReport report = new RankedGameReport()
+            GameDto report = new GameDto()
             {
                 RedScore = redScore,
                 BlueScore = blueScore,
@@ -63,12 +63,12 @@ namespace PubstarsGameServer.GameStates
             return Task.FromResult<object>(null);
         }
 
-        private List<RankedGameReport.PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
+        private List<GameDto.PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
         {
-            List<RankedGameReport.PlayerStatLine> stats = new List<RankedGameReport.PlayerStatLine>();
+            List<GameDto.PlayerStatLine> stats = new List<GameDto.PlayerStatLine>();
             foreach (string s in RedTeam.Concat(BlueTeam))
             {
-                RankedGameReport.PlayerStatLine player = new RankedGameReport.PlayerStatLine();
+                GameDto.PlayerStatLine player = new GameDto.PlayerStatLine();
                 player.Name = s;
                 player.Team = RedTeam.Contains(s) ? "Red" : "Blue";
 

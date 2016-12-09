@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PubstarsDtos
 {
-    public class RankedGameReport
+    public class GameDto
     {
         public ICollection<PlayerStatLine> PlayerStats { get; set; }
         public int RedScore { get; set; }
@@ -22,14 +22,14 @@ namespace PubstarsDtos
             public bool Leaver { get; set; }
         }
 
-        public static RankedGameReport RandomGame(List<string> names)
+        public static GameDto RandomGame(List<string> names)
         {
             int redgoals = 0;
             int bluegoals = 0;
             int redassists = 0;
             int blueassists = 0;
             Random r = new Random();
-            List<RankedGameReport.PlayerStatLine> statlines = new List<RankedGameReport.PlayerStatLine>();
+            List<GameDto.PlayerStatLine> statlines = new List<GameDto.PlayerStatLine>();
             List<string> players = new List<string>();
             while(players.Count() < 10)
             {
@@ -55,7 +55,7 @@ namespace PubstarsDtos
                     blueassists += a;
                 }
 
-                statlines.Add(new RankedGameReport.PlayerStatLine()
+                statlines.Add(new GameDto.PlayerStatLine()
                 {
                     Name = players[j],
                     Goals = g,
@@ -70,7 +70,7 @@ namespace PubstarsDtos
                 statlines[0].Goals++;
             }
 
-            return new RankedGameReport()
+            return new GameDto()
             {
                 RedScore = redgoals,
                 BlueScore = bluegoals,

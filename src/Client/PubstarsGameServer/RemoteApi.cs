@@ -19,15 +19,15 @@ namespace PubstarsGameServer
         /// Initialized user data from server
         /// </summary>
         /// <returns>User data</returns>
-        public static async Task<Dictionary<string, UserData>> GetUserData()
+        public static async Task<IEnumerable<UserDto>> GetUserData()
         {
             await GetToken();
-            var client = new RestClient(k_Url + "UserData/GetUserData");
+            var client = new RestClient(k_Url + "UserData/GetAllUserData");
             var request = new RestRequest(Method.GET);
 
             request.AddHeader("Authorization", string.Format("Bearer {0}", s_Jwt));
 
-            var response = await client.ExecuteTaskAsync<Dictionary<string, UserData>>(request);
+            var response = await client.ExecuteTaskAsync<List<UserDto>>(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -41,11 +41,25 @@ namespace PubstarsGameServer
             }
         }
 
-        public static async Task<UserData> GetUserData(string name)
+        public static async Task<UserDto> GetUserData(string name)
         {
-            await GetToken();
-            //go fetch user
-            return null;
+            var client = new RestClient(k_Url + "UserData/GetUserData");
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("Authorization", string.Format("Bearer {0}", s_Jwt));
+            request.AddParameter("name",name);
+            var response = await client.ExecuteTaskAsync<UserDto>(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Console.WriteLine("GetUserData successful.");
+                return response.Data;
+            }
+            else
+            {
+                Console.WriteLine("http error: " + response.StatusCode + " - " + response.Content);
+                return null;
+            }        
         }
 
         /// <summary>
@@ -53,7 +67,7 @@ namespace PubstarsGameServer
         /// </summary>
         /// <param name="gameReport"></param>
         /// <returns>Updated user data</returns>
-        public static async Task<bool> SendGameResult(RankedGameReport gameReport)
+        public static async Task<bool> SendGameResult(GameDto gameReport)
         {
             RestClient client = new RestClient(k_Url + "Games/ReportGame");
             var request = new RestRequest(Method.POST);

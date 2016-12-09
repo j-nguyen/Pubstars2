@@ -50,25 +50,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Settings.cs" />
     <Compile Include="Services\LoginHandler.cs" />
     <Compile Include="Services\Warden.cs" />
     <Compile Include="Model\GameContext.cs" />
-    <Compile Include="Model\MemoryAddresses.cs" />
+    <Compile Include="Data\MemoryAddresses.cs" />
     <Compile Include="Services\CommandListener.cs" />
     <Compile Include="GameStates\EndGame.cs" />
     <Compile Include="GameStates\Gameplay.cs" />
     <Compile Include="GameStates\Init.cs" />
     <Compile Include="GameStates\GameSetup.cs" />
     <Compile Include="IState.cs" />
-    <Compile Include="Dtos\RankedGameReport.cs" />
+    <Compile Include="Dtos\GameDto.cs" />
     <Compile Include="Model\RankedPlayer.cs" />
     <Compile Include="RemoteApi.cs" />
-    <Compile Include="Services\LoginManager.cs" />
+    <Compile Include="Model\UserData.cs" />
     <Compile Include="StateMachine.cs" />
     <Compile Include="GameStates\WaitingForPlayers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Dtos\UserData.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

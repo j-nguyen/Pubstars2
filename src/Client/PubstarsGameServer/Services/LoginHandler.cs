@@ -1,4 +1,5 @@
 ﻿using HQMEditorDedicated;
+using PubstarsGameServer.Data;
 using PubstarsGameServer.Model;
 using PubstarsGameServer.Services;
 using System;
@@ -11,27 +12,29 @@ namespace PubstarsGameServer.Services
 {
     class LoginHandler
     {
-        private LoginManager m_LoginManager;
-        private CommandListener m_CommandListener;
-        private List<Task<LoginManager.LoginResult>> m_LoginTasks;
+        private UserData m_UserData;
+        private CommandListener m_CommandListener;        
         private GameContext m_Context;
+
+        private List<Task<UserData.LoginResult>> m_LoginTasks;
 
         public LoginHandler(GameContext context)
         {
             m_Context = context;
-            m_LoginManager = new LoginManager();
-            m_LoginTasks = new List<Task<LoginManager.LoginResult>>();
-            m_CommandListener = new CommandListener(new Dictionary<string, Action<Command>>()
-            {
-                { "join", Login },
-                { "info", Info }
-            });
+            m_UserData = new UserData();
+            m_CommandListener = new CommandListener();
+
+            m_LoginTasks = new List<Task<UserData.LoginResult>>();          
         }
 
         public async Task Init()
         {
-            if (await m_LoginManager.Init())
+            var userData = await RemoteApi.GetUserData();
+            if (userData != null)
             {
+                m_UserData.Init(userData);
+                m_CommandListener.AddCommand("join", Login);
+                m_CommandListener.AddCommand("info", Info);
                 Console.WriteLine("LoginManager initialized successfully.");
             }
             else
@@ -64,16 +67,16 @@ namespace PubstarsGameServer.Services
                     return;
                 }
                 string pw = cmd.Args[0];
-                Task<LoginManager.LoginResult> loginTask = m_LoginManager.Login(cmd.Sender, pw);
+                Task<UserData.LoginResult> loginTask = m_UserData.Login(cmd.Sender, pw);
                 m_LoginTasks.Add(loginTask);
             }
         }
 
         private void ResolveLoginTasks()
         {
-            foreach (Task<LoginManager.LoginResult> t in m_LoginTasks.Where(x => x.IsCompleted))
+            foreach (Task<UserData.LoginResult> t in m_LoginTasks.Where(x => x.IsCompleted))
             {
-                LoginManager.LoginResult result = t.Result;
+                UserData.LoginResult result = t.Result;
                 Chat.SendMessage(">> " + result.Result);
                 if (result.RankedPlayer != null)
                 {
