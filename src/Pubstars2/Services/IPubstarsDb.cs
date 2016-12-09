@@ -18,7 +18,8 @@ namespace Pubstars2.Data
 
         IEnumerable<PlayerGameStats> PlayerGameStats();
 
-        Dictionary<string,UserData> GetUserData();
+        IEnumerable<UserData> GetUserData();
+        Task<UserData> GetUserData(string name);
 
         void AddGame(Game game);
         void SaveChanges();

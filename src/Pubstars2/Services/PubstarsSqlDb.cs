@@ -28,31 +28,57 @@ namespace Pubstars2.Data
 
         public IEnumerable<Game> Games()
         {
-            return _db.Games.Include(x => x.playerStats).ThenInclude(stats => stats.Player).ThenInclude(player => player.Rating);
+            return _db.Games
+                .Include(x => x.playerStats)
+                .ThenInclude(stats => stats.Player)
+                .ThenInclude(player => player.Rating);
         }
 
-        public Dictionary<string, UserData> GetUserData()
+        public IEnumerable<UserData> GetUserData()
         {
-            Dictionary<string, UserData> userData = new Dictionary<string, UserData>();
+            var userData = new List<UserData>();
 
-            foreach (ApplicationUser user in _userManager.Users.Include(x => x.PlayerStats).ThenInclude(x => x.Rating))
+            foreach (ApplicationUser user in _userManager.Users
+                .Include(x => x.PlayerStats)
+                .ThenInclude(x => x.Rating))
             {
                 if(user.PlayerStats != null)
                 {
-                    userData[user.UserName] = new UserData()
+                    userData.Add(new UserData()
                     {
                         Name = user.UserName,
                         Password = user.PubstarsPassword,
                         Rating = user.PlayerStats.Rating.Mean
-                    };
+                    });
                 }                
             }
             return userData;
         }
 
+        public async Task<UserData> GetUserData(string name)
+        {
+            var user = await _userManager.Users
+                .Include(x => x.PlayerStats)
+                .ThenInclude(x => x.Rating)
+                .FirstOrDefaultAsync(x => x.UserName == name);
+
+            if (user != null && user.PlayerStats != null)
+            {
+                return new UserData()
+                {
+                    Name = user.UserName,
+                    Password = user.PubstarsPassword,
+                    Rating = user.PlayerStats.Rating.Mean
+                };
+            }
+            return null;
+        }
+
         public IEnumerable<PlayerGameStats> PlayerGameStats()
         {
-            return _db.PlayerStats.Include(x => x.Player).Include(x => x.Game) ;
+            return _db.PlayerStats
+                .Include(x => x.Player)
+                .Include(x => x.Game);
         }
 
         public IEnumerable<Player> Players()
@@ -72,7 +98,9 @@ namespace Pubstars2.Data
 
         public IEnumerable<ApplicationUser> UsersWithPlayer()
         {
-            return _db.Users.Include(x => x.PlayerStats).ThenInclude(x => x.Rating);
+            return _db.Users
+                .Include(x => x.PlayerStats)
+                .ThenInclude(x => x.Rating);
         }
     }
 }

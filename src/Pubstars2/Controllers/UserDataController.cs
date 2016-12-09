@@ -6,6 +6,8 @@ using PubstarsDtos;
 using Microsoft.EntityFrameworkCore;
 using Pubstars2.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Pubstars2.Controllers
 {
@@ -27,9 +29,22 @@ namespace Pubstars2.Controllers
         //for client
         [HttpGet]
         [Authorize(Roles ="client")]
-        public IActionResult GetUserData()
+        public IActionResult GetAllUserData()
         {            
             return new JsonResult(_db.GetUserData());
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "client")]
+        public async Task<IActionResult> GetUserData(string name)
+        {
+            name = WebUtility.UrlDecode(name);
+            var result = await _db.GetUserData(name);
+            if (result == null)
+            {
+                return NotFound("could not find " + name);
+            }
+            return new JsonResult(result);
         }
     }
 }
