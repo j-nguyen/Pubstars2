@@ -40,6 +40,7 @@ namespace PubstarsGameServer.GameStates
         {
             if(m_Context.LoggedInPlayers.Count >= Settings.MIN_PLAYERS && !m_MinPlayersReached)
             {
+                await Task.Delay(10); //allow last message to be sent
                 Console.WriteLine("WaitingForPlayers: Required player count reached.");
                 //reset game
                 GameInfo.IntermissionTime = 0;
@@ -68,7 +69,7 @@ namespace PubstarsGameServer.GameStates
             if(m_MinPlayersReached && DateTime.Now >= m_MinPlayersReachedTime + new TimeSpan(0,0,10))
             {
                 Chat.SendMessage("---------------------------------------------------");
-                Chat.SendMessage("     Game Starting...");
+                Chat.SendMessage("         Game Starting");
                 Chat.SendMessage("---------------------------------------------------");
                 return true;
             }
