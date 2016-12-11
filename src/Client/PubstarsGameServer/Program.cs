@@ -28,8 +28,9 @@ namespace PubstarsGameServer
                 context = new GameContext();
 
                 Warden warden = new Warden(context);
-                
-                LoginHandler loginHandler = new LoginHandler(context);
+                CommandListener commandListener = new CommandListener();
+                LoginHandler loginHandler = new LoginHandler(context, commandListener);
+                SubHandler subHandler = new SubHandler(context, commandListener);
                 
                 loginHandler.Init().Wait();
     
@@ -41,7 +42,8 @@ namespace PubstarsGameServer
                 while (!sm.Update().Result)
                 {
                     Task.Delay(100).Wait();
-                    loginHandler.HandleLogins();                    
+                    loginHandler.HandleLogins();
+                    subHandler.Update();                
                 };
             }            
         }

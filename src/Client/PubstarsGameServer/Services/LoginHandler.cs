@@ -18,11 +18,12 @@ namespace PubstarsGameServer.Services
 
         private List<Task<UserData.LoginResult>> m_LoginTasks;
 
-        public LoginHandler(GameContext context)
+        public LoginHandler(GameContext context, CommandListener cmdListener)
         {
             m_Context = context;
+            m_CommandListener = cmdListener;
             m_UserData = new UserData();
-            m_CommandListener = new CommandListener();
+            
 
             m_LoginTasks = new List<Task<UserData.LoginResult>>();          
         }
@@ -46,15 +47,8 @@ namespace PubstarsGameServer.Services
 
         public void HandleLogins()
         {
-            RemoveLoggedOutPlayers();
             m_CommandListener.Listen();
             ResolveLoginTasks();                        
-        }
-
-        public void RemoveLoggedOutPlayers()
-        {
-            byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, 20 * MemoryAddresses.PLAYER_STRUCT_SIZE);
-            m_Context.LoggedInPlayers.RemoveAll(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0);
         }
 
         private void Login(Command cmd)

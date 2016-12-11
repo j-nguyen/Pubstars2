@@ -54,7 +54,7 @@ namespace PubstarsGameServer.GameStates
                 Chat.SendMessage("     Game will start in 10 seconds.");
                 Chat.SendMessage("---------------------------------------------------");
                 m_MinPlayersReached = true;
-                m_MinPlayersReachedTime = DateTime.Now;
+                m_MinPlayersReachedTime = DateTime.UtcNow;
             }
 
             if(m_Context.LoggedInPlayers.Count < Settings.MIN_PLAYERS && m_MinPlayersReached)
@@ -66,7 +66,7 @@ namespace PubstarsGameServer.GameStates
                 m_MinPlayersReachedTime = DateTime.MaxValue;
             }
 
-            if(m_MinPlayersReached && DateTime.Now >= m_MinPlayersReachedTime + new TimeSpan(0,0,10))
+            if(m_MinPlayersReached && DateTime.UtcNow >= m_MinPlayersReachedTime + new TimeSpan(0,0,10))
             {
                 Chat.SendMessage("---------------------------------------------------");
                 Chat.SendMessage("         Game Starting");

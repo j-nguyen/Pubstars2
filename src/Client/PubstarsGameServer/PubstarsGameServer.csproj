@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Services\LoginHandler.cs" />
+    <Compile Include="Services\SubHandler.cs" />
     <Compile Include="Services\Warden.cs" />
     <Compile Include="Model\GameContext.cs" />
     <Compile Include="Data\MemoryAddresses.cs" />

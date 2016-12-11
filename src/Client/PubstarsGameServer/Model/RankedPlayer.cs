@@ -9,8 +9,6 @@ namespace PubstarsGameServer.Model
         public readonly Player PlayerStruct;
         public readonly double Rating;
 
-        public HQMTeam AssignedTeam = HQMTeam.NoTeam;
-
         public RankedPlayer(string name, byte[] ip, Player player, double rating)
         {
             Name = name;

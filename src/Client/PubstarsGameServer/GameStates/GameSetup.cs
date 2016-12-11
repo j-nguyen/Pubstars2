@@ -87,17 +87,14 @@ namespace PubstarsGameServer.GameStates
                 if (TotalRating(RedTeam) < TotalRating(BlueTeam) && RedTeam.Count < half_max)
                 {
                     RedTeam.Add(p.Name);
-                    p.AssignedTeam = HQMTeam.Red;
                 }
                 else if (BlueTeam.Count < half_max)
                 {
                     BlueTeam.Add(p.Name);
-                    p.AssignedTeam = HQMTeam.Blue;
                 }
                 else
                 {
                     RedTeam.Add(p.Name);
-                    p.AssignedTeam = HQMTeam.Red;
                 }
             }
             m_Context.RedTeam = new List<string>(RedTeam);
@@ -109,11 +106,11 @@ namespace PubstarsGameServer.GameStates
                 foreach (RankedPlayer p in players.Where(p => p.PlayerStruct.Team == HQMTeam.NoTeam))
                 {
                     p.PlayerStruct.LockoutTime = 0;
-                    if (p.AssignedTeam == HQMTeam.Red)
+                    if (RedTeam.Contains(p.Name))
                     {
                         p.PlayerStruct.LegState = 4;
                     }
-                    else if (p.AssignedTeam == HQMTeam.Blue)
+                    else if (BlueTeam.Contains(p.Name))
                         p.PlayerStruct.LegState = 8;
                 }
             }

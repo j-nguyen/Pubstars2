@@ -37,6 +37,7 @@ namespace PubstarsGameServer.GameStates
                 {
                     Console.WriteLine("Goal scored");
                 }
+
             }
             return Task.FromResult<bool>(GameInfo.IsGameOver);
         }      
