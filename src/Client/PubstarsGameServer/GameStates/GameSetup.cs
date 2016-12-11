@@ -43,9 +43,9 @@ namespace PubstarsGameServer.GameStates
 
         //TODO: clean this up
         private void CreateTeams()
-        {
-            List<string> RedTeam = new List<string>();
-            List<string> BlueTeam = new List<string>();
+        {          
+            List<string> redTeam = new List<string>();
+            List<string> blueTeam = new List<string>();
 
             //give prio to people who didn't play last game
             List<RankedPlayer> players = new List<RankedPlayer>();
@@ -84,21 +84,23 @@ namespace PubstarsGameServer.GameStates
             for (int i = 0; i < SortedRankedPlayers.Count; i++)
             {
                 RankedPlayer p = SortedRankedPlayers[i];
-                if (TotalRating(RedTeam) < TotalRating(BlueTeam) && RedTeam.Count < half_max)
+                if (TotalRating(redTeam) < TotalRating(blueTeam) && redTeam.Count < half_max)
                 {
-                    RedTeam.Add(p.Name);
+                    redTeam.Add(p.Name);
                 }
-                else if (BlueTeam.Count < half_max)
+                else if (blueTeam.Count < half_max)
                 {
-                    BlueTeam.Add(p.Name);
+                    blueTeam.Add(p.Name);
                 }
                 else
                 {
-                    RedTeam.Add(p.Name);
+                    redTeam.Add(p.Name);
                 }
             }
-            m_Context.RedTeam = new List<string>(RedTeam);
-            m_Context.BlueTeam = new List<string>(BlueTeam);
+
+            m_Context.ClearTeams();
+            redTeam.ForEach(x => m_Context.AddPlayerToTeam(x, HQMTeam.Red));
+            blueTeam.ForEach(x => m_Context.AddPlayerToTeam(x, HQMTeam.Blue));
 
             //auto join
             while (players.Where(p => p.PlayerStruct.Team == HQMTeam.NoTeam).Count() > 0)
@@ -106,11 +108,11 @@ namespace PubstarsGameServer.GameStates
                 foreach (RankedPlayer p in players.Where(p => p.PlayerStruct.Team == HQMTeam.NoTeam))
                 {
                     p.PlayerStruct.LockoutTime = 0;
-                    if (RedTeam.Contains(p.Name))
+                    if (redTeam.Contains(p.Name))
                     {
                         p.PlayerStruct.LegState = 4;
                     }
-                    else if (BlueTeam.Contains(p.Name))
+                    else if (blueTeam.Contains(p.Name))
                         p.PlayerStruct.LegState = 8;
                 }
             }

@@ -39,7 +39,7 @@ namespace PubstarsGameServer.GameStates
                 }
 
             }
-            return Task.FromResult<bool>(GameInfo.IsGameOver);
+            return Task.FromResult(GameInfo.IsGameOver);
         }      
 
         public Task OnExit()

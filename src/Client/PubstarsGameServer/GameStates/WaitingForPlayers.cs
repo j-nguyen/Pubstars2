@@ -38,7 +38,7 @@ namespace PubstarsGameServer.GameStates
 
         public async Task<bool> Execute()
         {
-            if(m_Context.LoggedInPlayers.Count >= Settings.MIN_PLAYERS && !m_MinPlayersReached)
+            if(m_Context.LoggedInPlayers.Count() >= Settings.MIN_PLAYERS && !m_MinPlayersReached)
             {
                 await Task.Delay(10); //allow last message to be sent
                 Console.WriteLine("WaitingForPlayers: Required player count reached.");

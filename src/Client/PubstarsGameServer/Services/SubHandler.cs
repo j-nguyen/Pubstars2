@@ -45,7 +45,7 @@ namespace PubstarsGameServer.Services
             var loggedOutPlayers = m_Context.LoggedInPlayers.Where(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0).ToList();
             foreach(RankedPlayer p in loggedOutPlayers)
             {
-                m_Context.LoggedInPlayers.Remove(p);
+                m_Context.RemovePlayer(p.Name);
                                 
                 if(m_Context.IsPlaying(p))
                 {
@@ -132,14 +132,14 @@ namespace PubstarsGameServer.Services
             var sub = ClosestElo();
             if(m_Context.RedTeam.Contains(m_Leaver.Name))
             {
-                m_Context.RedTeam.Remove(m_Leaver.Name);
-                m_Context.RedTeam.Add(sub.Name);
+                m_Context.RemovePlayerFromTeam(m_Leaver.Name, HQMTeam.Red);
+                m_Context.AddPlayerToTeam(sub.Name, HQMTeam.Red);
                 Chat.SendMessage(sub.Name + " added to the Red Team");
             }
             else if(m_Context.BlueTeam.Contains(m_Leaver.Name))
             {
-                m_Context.BlueTeam.Remove(m_Leaver.Name);
-                m_Context.BlueTeam.Add(sub.Name);
+                m_Context.RemovePlayerFromTeam(m_Leaver.Name, HQMTeam.Blue);
+                m_Context.AddPlayerToTeam(sub.Name, HQMTeam.Blue);
                 Chat.SendMessage(sub.Name + " added to the Blue Team");
             }                      
             else

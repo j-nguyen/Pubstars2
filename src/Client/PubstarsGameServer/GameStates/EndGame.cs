@@ -63,7 +63,7 @@ namespace PubstarsGameServer.GameStates
             return Task.FromResult<object>(null);
         }
 
-        private List<GameDto.PlayerStatLine> CreateStatLines(List<string> RedTeam, List<String> BlueTeam)
+        private List<GameDto.PlayerStatLine> CreateStatLines(IReadOnlyList<string> RedTeam, IReadOnlyList<String> BlueTeam)
         {
             List<GameDto.PlayerStatLine> stats = new List<GameDto.PlayerStatLine>();
             foreach (string s in RedTeam.Concat(BlueTeam))

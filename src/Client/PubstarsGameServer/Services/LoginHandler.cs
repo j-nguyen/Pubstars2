@@ -74,7 +74,7 @@ namespace PubstarsGameServer.Services
                 Chat.SendMessage(">> " + result.Result);
                 if (result.RankedPlayer != null)
                 {
-                    m_Context.LoggedInPlayers.Add(result.RankedPlayer);
+                    m_Context.AddPlayer(result.RankedPlayer);
                 }
             }
             m_LoginTasks.RemoveAll(x => x.IsCompleted);
@@ -82,7 +82,7 @@ namespace PubstarsGameServer.Services
 
         private void Info(Command cmd)
         {
-            Chat.SendMessage(">> "+ m_Context.LoggedInPlayers.Count + " players logged in.");
+            Chat.SendMessage(">> "+ m_Context.LoggedInPlayers.Count() + " players logged in.");
 
         }
 

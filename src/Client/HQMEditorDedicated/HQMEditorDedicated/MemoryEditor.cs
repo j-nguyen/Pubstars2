@@ -36,6 +36,7 @@ namespace HQMEditorDedicated
             }
             catch (System.IndexOutOfRangeException e)  // CS0168
             {
+                Console.WriteLine(e);
                 return false;
             }
             hockeyProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, false, hockeyProcess.Id);
@@ -57,6 +58,7 @@ namespace HQMEditorDedicated
             }
             catch (System.IndexOutOfRangeException e)  // CS0168
             {
+                Console.WriteLine(e);
                 return false;
             }
             hockeyProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, false, hockeyProcess.Id);
