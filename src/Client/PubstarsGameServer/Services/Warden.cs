@@ -15,39 +15,33 @@ namespace PubstarsGameServer.Services
         private const int MAX_PLAYERS = 20;
 
         private GameContext m_Context;
-        private bool m_Running = false;
-
-        private Thread m_WardenThread;
+        private CancellationTokenSource m_TokenSource;
+        bool m_Watching = false;
 
         public Warden(GameContext context)
         {
-            m_Context = context;
+            m_Context = context;                      
         }
 
         public void Start()
         {
-            if(!m_Running)
-            {
-                m_WardenThread = new Thread(Run);
-                m_Running = true;
-                m_WardenThread.Start();
-            }            
+            m_TokenSource = new CancellationTokenSource();
+            m_Watching = true;
+            Task.Run(Watch, m_TokenSource.Token);          
         }
 
         public void Stop()
         {
-            if(m_Running)
-            {
-                m_Running = false;
-                m_WardenThread.Join();
-            }          
+            m_Watching = false;
+            m_TokenSource.Cancel();
+            m_TokenSource.Dispose();     
         }
 
-        private void Run()
+        private async Task Watch()
         {
-            while(m_Running)
+            while(m_Watching)
             {
-                byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, MAX_PLAYERS * MemoryAddresses.PLAYER_STRUCT_SIZE);
+                byte[] playerList = GetPlayerListMemoryBlock();
                 for (int i = 0; i < MAX_PLAYERS; i++)
                 {
                     if (playerList[i * MemoryAddresses.PLAYER_STRUCT_SIZE] == 1)//in server
@@ -59,22 +53,38 @@ namespace PubstarsGameServer.Services
 
                         if (t != HQMTeam.NoTeam && (int)t != 255) //if on the ice
                         {
-                            bool onRightTeam = (((t == HQMTeam.Blue && m_Context.BlueTeam.Contains(name)) || (t == HQMTeam.Red && m_Context.RedTeam.Contains(name))) && m_Context.IsLoggedIn(name, i));
-                            if (!onRightTeam)
+                            if (!OnRightTeam(t, name, i))
                             {
                                 int team = (int)t;
                                 while (team != 255)
                                 {
-                                    MemoryEditor.WriteInt(32, MemoryAddresses.PLAYER_LIST_ADDRESS + i * MemoryAddresses.PLAYER_STRUCT_SIZE + MemoryAddresses.LEG_STATE_OFFSET);
-                                    team = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS + i * MemoryAddresses.PLAYER_STRUCT_SIZE + MemoryAddresses.TEAM_OFFSET, 1)[0];
+                                    ForceLeaveIce(i);
+                                    team = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS + i * MemoryAddresses.PLAYER_STRUCT_SIZE + MemoryAddresses.TEAM_OFFSET, 1)[0];                                 
                                 }
 
                             }
                         }
-                    }                    
-                    Thread.Sleep(100); //performance
+                    }
+                    await Task.Yield();
                 }
             }            
         }  
+
+        private bool OnRightTeam(HQMTeam t, string name, int slot)
+        {
+            return (t == HQMTeam.Blue && m_Context.GetPlayer(name).Team == HQMTeam.Blue) 
+                || (t == HQMTeam.Red && m_Context.GetPlayer(name).Team == HQMTeam.Red
+                && m_Context.IsLoggedIn(name, slot));
+        }
+
+        private void ForceLeaveIce(int slot)
+        {
+            MemoryEditor.WriteInt(32, MemoryAddresses.PLAYER_LIST_ADDRESS + slot * MemoryAddresses.PLAYER_STRUCT_SIZE + MemoryAddresses.LEG_STATE_OFFSET);
+        }
+
+        byte[] GetPlayerListMemoryBlock()
+        {
+            return MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, MAX_PLAYERS * MemoryAddresses.PLAYER_STRUCT_SIZE);
+        }
     }
 }

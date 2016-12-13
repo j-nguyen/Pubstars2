@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PubstarsGameServer
@@ -23,7 +24,7 @@ namespace PubstarsGameServer
           
             while (true)
             {
-                IEnumerable<string> lastGamePlayers = context?.RedTeam.Concat(context?.BlueTeam) ?? new List<string>();
+                IEnumerable<string> lastGamePlayers = context?.LoggedInPlayers.Where(x=>x.Team != HQMTeam.NoTeam).Select(x=>x.Name) ?? new List<string>();
 
                 context = new GameContext();
 
@@ -41,10 +42,12 @@ namespace PubstarsGameServer
 
                 while (!sm.Update().Result)
                 {
-                    Task.Delay(100).Wait();
+                    Thread.Sleep(100);
                     loginHandler.HandleLogins();
                     subHandler.Update();                
                 };
+
+                GC.Collect();
             }            
         }
     }

@@ -23,21 +23,7 @@ namespace PubstarsGameServer.Model
             UserDto user;
             if(m_UserData.TryGetValue(player.Name, out user))
             {
-                if (ValidPassword(user, password))
-                {
-                    return new LoginResult()
-                    {
-                        Result = user.Name + " - logged in",
-                        RankedPlayer = new RankedPlayer(user.Name, player.IPAddress, player, user.Rating)
-                    };
-                }
-                else
-                {
-                    return new LoginResult()
-                    {
-                        Result = user.Name + " - invalid password"
-                    };
-                }                
+                return Validate(user, password, player);
             }
             else
             {
@@ -52,14 +38,28 @@ namespace PubstarsGameServer.Model
                 else
                 {
                     m_UserData[u.Name] = u;
-                    return await Login(player, password);
+                    return Validate(u, password, player);
                 }               
             }
         }
 
-        private bool ValidPassword(UserDto user, string pw)
+        private LoginResult Validate(UserDto user, string pw, Player player)
         {
-            return user.Password == pw;
+            if (user.Password == pw)
+            {
+                return new LoginResult()
+                {
+                    Result = user.Name + " - logged in",
+                    RankedPlayer = new RankedPlayer(user.Name, player.IPAddress, player, user.Rating)
+                };
+            }
+            else
+            {
+                return new LoginResult()
+                {
+                    Result = user.Name + " - invalid password"
+                };
+            }
         }
 
         public class LoginResult

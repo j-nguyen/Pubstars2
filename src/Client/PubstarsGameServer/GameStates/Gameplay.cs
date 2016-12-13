@@ -33,11 +33,6 @@ namespace PubstarsGameServer.GameStates
                     GameInfo.Period = 3;
                     GameInfo.GameTime = new TimeSpan(0, 0, 0, 1);
                 }
-                if(GameInfo.AfterGoalFaceoffTime > 0)
-                {
-                    Console.WriteLine("Goal scored");
-                }
-
             }
             return Task.FromResult(GameInfo.IsGameOver);
         }      

@@ -61,8 +61,8 @@ namespace PubstarsGameServer.Services
                     return;
                 }
                 string pw = cmd.Args[0];
-                Task<UserData.LoginResult> loginTask = m_UserData.Login(cmd.Sender, pw);
-                m_LoginTasks.Add(loginTask);
+                
+                m_LoginTasks.Add( Task.Run(() => m_UserData.Login(cmd.Sender, pw)) );
             }
         }
 
@@ -83,7 +83,6 @@ namespace PubstarsGameServer.Services
         private void Info(Command cmd)
         {
             Chat.SendMessage(">> "+ m_Context.LoggedInPlayers.Count() + " players logged in.");
-
         }
 
       

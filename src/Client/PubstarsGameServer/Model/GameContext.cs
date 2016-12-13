@@ -10,14 +10,12 @@ namespace PubstarsGameServer.Model
     class GameContext
     {
         public IReadOnlyList<RankedPlayer> LoggedInPlayers { get { return m_LoggedInPlayers.Values.ToList(); } }
-        public IReadOnlyList<string> RedTeam { get { return m_RedTeam; } }
-        public IReadOnlyList<string> BlueTeam { get { return m_BlueTeam; } }
+
 
         public List<string> Leavers = new List<string>();
 
         private Dictionary<string, RankedPlayer> m_LoggedInPlayers = new Dictionary<string, RankedPlayer>();
-        private List<string> m_RedTeam = new List<string>();
-        private List<string> m_BlueTeam = new List<string>();             
+        
 
         public void RemovePlayer(string name)
         {
@@ -31,23 +29,30 @@ namespace PubstarsGameServer.Model
 
         public void ClearTeams()
         {
-            m_RedTeam = new List<string>();
-            m_BlueTeam = new List<string>();
+            foreach(RankedPlayer rp in m_LoggedInPlayers.Values)
+            {
+                rp.Team = HQMTeam.NoTeam;
+            }
         }
 
         public void AddPlayerToTeam(string name, HQMTeam team)
         {
-            if(m_LoggedInPlayers.ContainsKey(name))
+            RankedPlayer p;
+            if (m_LoggedInPlayers.TryGetValue(name, out p))
             {
-                if (team == HQMTeam.Red) m_RedTeam.Add(name);               
-                else if (team == HQMTeam.Blue) m_BlueTeam.Add(name);
+                p.Team = team;
             }
+            else
+                throw new InvalidOperationException("Could not add " + name + "to " + team);
         }
 
-        public void RemovePlayerFromTeam(string name, HQMTeam team)
+        public void RemovePlayerFromTeam(string name)
         {
-            if (team == HQMTeam.Red && m_RedTeam.Contains(name)) m_RedTeam.Remove(name);
-            if (team == HQMTeam.Blue && m_BlueTeam.Contains(name)) m_BlueTeam.Remove(name);
+            RankedPlayer p;
+            if (m_LoggedInPlayers.TryGetValue(name, out p))
+            {
+                p.Team = HQMTeam.NoTeam;
+            }
         }
 
         public bool IsLoggedIn(string name, int slot)
@@ -66,7 +71,7 @@ namespace PubstarsGameServer.Model
 
         public bool IsPlaying(RankedPlayer p)
         {
-            return RedTeam.Concat(BlueTeam).Contains(p.Name);
+            return p.Team != HQMTeam.NoTeam;
         }
     }
 }

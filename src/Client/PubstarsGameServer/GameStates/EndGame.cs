@@ -32,7 +32,7 @@ namespace PubstarsGameServer.GameStates
             
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<GameDto.PlayerStatLine> stats = CreateStatLines(m_Context.RedTeam, m_Context.BlueTeam);            
+            List<GameDto.PlayerStatLine> stats = CreateStatLines(m_Context.LoggedInPlayers.Where(x=>x.Team == HQMTeam.Red).Select(x=>x.Name), m_Context.LoggedInPlayers.Where(x => x.Team == HQMTeam.Blue).Select(x => x.Name));            
 
             GameDto report = new GameDto()
             {
@@ -63,7 +63,7 @@ namespace PubstarsGameServer.GameStates
             return Task.FromResult<object>(null);
         }
 
-        private List<GameDto.PlayerStatLine> CreateStatLines(IReadOnlyList<string> RedTeam, IReadOnlyList<String> BlueTeam)
+        private List<GameDto.PlayerStatLine> CreateStatLines(IEnumerable<string> RedTeam, IEnumerable<string> BlueTeam)
         {
             List<GameDto.PlayerStatLine> stats = new List<GameDto.PlayerStatLine>();
             foreach (string s in RedTeam.Concat(BlueTeam))

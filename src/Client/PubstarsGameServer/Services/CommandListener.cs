@@ -13,7 +13,8 @@ namespace PubstarsGameServer.Services
 
         public void AddCommand(string trigger, Action<Command> action)
         {
-            m_Commands.Add(trigger, action); 
+            if(!m_Commands.ContainsKey(trigger))
+                m_Commands.Add(trigger, action); 
         }
 
         public void RemoveCommand(string trigger)

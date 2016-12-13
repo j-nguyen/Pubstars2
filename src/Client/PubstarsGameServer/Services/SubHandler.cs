@@ -19,7 +19,6 @@ namespace PubstarsGameServer.Services
         private bool m_FindingReplacement = false;
         private DateTime m_ReplacementSearchStart = DateTime.MaxValue;
 
-        private RankedPlayer m_Leaver;
         private List<RankedPlayer> m_PotentialSubs;
 
         public SubHandler(GameContext context, CommandListener commandListener)
@@ -49,11 +48,10 @@ namespace PubstarsGameServer.Services
                                 
                 if(m_Context.IsPlaying(p))
                 {
-                    //leaver found
-                    m_Leaver = p;
+                    m_Context.Leavers.Add(p.Name);
                     m_LeaveTimers.Enqueue(new LeaveTimer()
                     {
-                        Name = p.Name,
+                        Leaver = new Leaver() { Name = p.Name, Rating = p.Rating, TeamLeft = p.Team },
                         LeaveTime = DateTime.UtcNow
                     });
                 }                
@@ -66,18 +64,18 @@ namespace PubstarsGameServer.Services
 
             LeaveTimer timer = m_LeaveTimers.Peek();
 
-            if(m_Context.GetPlayer(timer.Name) != null)
+            if(m_Context.GetPlayer(timer.Leaver.Name) != null)
             {
                 //player rejoined
-                m_LeaveTimers.Dequeue();
+                m_Context.Leavers.Remove(timer.Leaver.Name);
+                if(m_LeaveTimers.Peek().Leaver.Name == timer.Leaver.Name)
+                    m_LeaveTimers.Dequeue();
                 return;
             }
 
-            if(timer.IsExpired())
-            {
-                timer = m_LeaveTimers.Dequeue();                
-                m_Context.Leavers.Add(timer.Name);
-                Chat.SendMessage("Leaver Detected: " + timer.Name);
+            if(timer.IsExpired() && !m_FindingReplacement)
+            {                              
+                Chat.SendMessage("Leaver Detected: " + timer.Leaver.Name);
 
                 TriggerReplacementFinder();
             }
@@ -114,7 +112,7 @@ namespace PubstarsGameServer.Services
         {
             string name = p.Name;
             return m_Context.IsLoggedIn(name, p.Slot) //is logged in
-                && !m_Context.RedTeam.Concat(m_Context.BlueTeam).Contains(name); //is not on a team
+                && m_Context.GetPlayer(name).Team == HQMTeam.NoTeam; //is not on a team
         }
 
         void ChooseSub()
@@ -128,32 +126,20 @@ namespace PubstarsGameServer.Services
                 TriggerReplacementFinder();
                 return;
             }
-
-            var sub = ClosestElo();
-            if(m_Context.RedTeam.Contains(m_Leaver.Name))
-            {
-                m_Context.RemovePlayerFromTeam(m_Leaver.Name, HQMTeam.Red);
-                m_Context.AddPlayerToTeam(sub.Name, HQMTeam.Red);
-                Chat.SendMessage(sub.Name + " added to the Red Team");
-            }
-            else if(m_Context.BlueTeam.Contains(m_Leaver.Name))
-            {
-                m_Context.RemovePlayerFromTeam(m_Leaver.Name, HQMTeam.Blue);
-                m_Context.AddPlayerToTeam(sub.Name, HQMTeam.Blue);
-                Chat.SendMessage(sub.Name + " added to the Blue Team");
-            }                      
-            else
-            {
-                throw new Exception(); //something went really wrong.
-            }
+            var leaver = m_LeaveTimers.Dequeue().Leaver;
+            var sub = ClosestElo(leaver);            
+            m_Context.RemovePlayerFromTeam(leaver.Name);
+            m_Context.AddPlayerToTeam(sub.Name, leaver.TeamLeft);
+            Chat.SendMessage(sub.Name + " added to "+leaver.TeamLeft);
+        
         }
 
-        RankedPlayer ClosestElo()
+        RankedPlayer ClosestElo(Leaver leaver)
         {
             RankedPlayer closestElo = m_PotentialSubs[0];
             foreach (RankedPlayer p in m_PotentialSubs)
             {
-                if (Math.Abs(p.Rating - m_Leaver.Rating) < Math.Abs(closestElo.Rating - m_Leaver.Rating))
+                if (Math.Abs(p.Rating - leaver.Rating) < Math.Abs(closestElo.Rating - leaver.Rating))
                     closestElo = p;
             }
             return closestElo;
@@ -161,13 +147,20 @@ namespace PubstarsGameServer.Services
 
         class LeaveTimer
         {
-            public string Name;
+            public Leaver Leaver;
             public DateTime LeaveTime;
 
             public bool IsExpired()
             {
                 return DateTime.UtcNow > LeaveTime + new TimeSpan(0, 0, 30);
             }
+        }
+
+        class Leaver
+        {
+            public string Name;
+            public double Rating;
+            public HQMTeam TeamLeft;
         }
     }
 }
