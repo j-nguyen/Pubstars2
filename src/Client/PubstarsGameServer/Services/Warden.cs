@@ -65,7 +65,7 @@ namespace PubstarsGameServer.Services
                             }
                         }
                     }
-                    await Task.Yield();
+                    await Task.Delay(50);
                 }
             }      
         }  
