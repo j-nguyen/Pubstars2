@@ -67,14 +67,18 @@ namespace PubstarsGameServer.Services
                     }
                     await Task.Yield();
                 }
-            }            
+            }      
         }  
 
         private bool OnRightTeam(HQMTeam t, string name, int slot)
         {
-            return (t == HQMTeam.Blue && m_Context.GetPlayer(name).Team == HQMTeam.Blue) 
-                || (t == HQMTeam.Red && m_Context.GetPlayer(name).Team == HQMTeam.Red
-                && m_Context.IsLoggedIn(name, slot));
+            RankedPlayer p = m_Context.GetPlayer(name);
+
+            if (p == null) return false;
+
+            else return m_Context.IsLoggedIn(name, slot) 
+                && ((t == HQMTeam.Blue && p.Team == HQMTeam.Blue) 
+                || (t == HQMTeam.Red && p.Team == HQMTeam.Red));
         }
 
         private void ForceLeaveIce(int slot)
