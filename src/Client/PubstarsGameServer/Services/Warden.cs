@@ -15,7 +15,6 @@ namespace PubstarsGameServer.Services
         private const int MAX_PLAYERS = 20;
 
         private GameContext m_Context;
-        private CancellationTokenSource m_TokenSource;
         bool m_Watching = false;
 
         public Warden(GameContext context)
@@ -25,21 +24,17 @@ namespace PubstarsGameServer.Services
 
         public void Start()
         {
-            m_TokenSource = new CancellationTokenSource();
-            m_Watching = true;
-            Task.Run(Watch, m_TokenSource.Token);          
+            m_Watching = true;      
         }
 
         public void Stop()
         {
             m_Watching = false;
-            m_TokenSource.Cancel();
-            m_TokenSource.Dispose();     
         }
 
-        private async Task Watch()
+        public void Watch()
         {
-            while(m_Watching)
+            if(m_Watching)
             {
                 byte[] playerList = GetPlayerListMemoryBlock();
                 for (int i = 0; i < MAX_PLAYERS; i++)
@@ -64,8 +59,7 @@ namespace PubstarsGameServer.Services
 
                             }
                         }
-                    }
-                    await Task.Delay(50);
+                    }                   
                 }
             }      
         }  

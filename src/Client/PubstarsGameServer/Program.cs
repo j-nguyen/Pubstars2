@@ -42,9 +42,10 @@ namespace PubstarsGameServer
 
                 while (!sm.Update().Result)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(50);
                     loginHandler.HandleLogins();
-                    subHandler.Update();                
+                    subHandler.Update();
+                    warden.Watch();         
                 };
 
                 GC.Collect();

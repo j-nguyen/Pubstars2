@@ -32,7 +32,7 @@ namespace PubstarsGameServer.Model
                 {                    
                     return new LoginResult()
                     {
-                        Result =  player.Name+ " does not exist"
+                        Result =  player.Name+ " does not exist. Sign up at hqmpubstars.com."
                     };
                 }
                 else
