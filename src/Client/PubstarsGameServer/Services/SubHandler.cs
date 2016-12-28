@@ -41,7 +41,11 @@ namespace PubstarsGameServer.Services
         public void RemoveLoggedOutPlayers()
         {
             byte[] playerList = MemoryEditor.ReadBytes(MemoryAddresses.PLAYER_LIST_ADDRESS, 20 * MemoryAddresses.PLAYER_STRUCT_SIZE);
-            var loggedOutPlayers = m_Context.LoggedInPlayers.Where(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0).ToList();
+
+            var loggedOutPlayers = m_Context.LoggedInPlayers
+                .Where(p => playerList[p.PlayerStruct.Slot * MemoryAddresses.PLAYER_STRUCT_SIZE] == 0)
+                .ToList();
+
             foreach(RankedPlayer p in loggedOutPlayers)
             {
                 m_Context.RemovePlayer(p.Name);
@@ -69,8 +73,10 @@ namespace PubstarsGameServer.Services
                 //player rejoined
                 m_Context.AddPlayerToTeam(timer.Leaver.Name, timer.Leaver.TeamLeft);
                 m_Context.Leavers.Remove(timer.Leaver.Name);
+
                 if(m_LeaveTimers.Peek().Leaver.Name == timer.Leaver.Name)
                     m_LeaveTimers.Dequeue();
+
                 return;
             }
 

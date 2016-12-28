@@ -32,8 +32,17 @@ namespace PubstarsGameServer.GameStates
             
             int redScore = GameInfo.RedScore;
             int blueScore = GameInfo.BlueScore;
-            List<GameDto.PlayerStatLine> stats = CreateStatLines(m_Context.LoggedInPlayers.Where(x=>x.Team == HQMTeam.Red).Select(x=>x.Name), m_Context.LoggedInPlayers.Where(x => x.Team == HQMTeam.Blue).Select(x => x.Name));            
 
+            var redTeam = m_Context.LoggedInPlayers
+                    .Where(x => x.Team == HQMTeam.Red)
+                    .Select(x => x.Name);
+
+            var blueTeam = m_Context.LoggedInPlayers
+                    .Where(x => x.Team == HQMTeam.Blue)
+                    .Select(x => x.Name);
+
+            List<GameDto.PlayerStatLine> stats = CreateStatLines(redTeam, blueTeam);
+          
             GameDto report = new GameDto()
             {
                 RedScore = redScore,
@@ -73,6 +82,7 @@ namespace PubstarsGameServer.GameStates
                 player.Team = RedTeam.Contains(s) ? "Red" : "Blue";
 
                 RankedPlayer rp = m_Context.LoggedInPlayers.FirstOrDefault(x => x.Name == s);
+
                 if (rp != null && rp.Name == rp.PlayerStruct.Name && rp.PlayerStruct.InServer)
                 {
                     player.Goals = rp.PlayerStruct.Goals;

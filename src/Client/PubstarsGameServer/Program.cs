@@ -24,7 +24,9 @@ namespace PubstarsGameServer
           
             while (true)
             {
-                IEnumerable<string> lastGamePlayers = context?.LoggedInPlayers.Where(x=>x.Team != HQMTeam.NoTeam).Select(x=>x.Name) ?? new List<string>();
+                IEnumerable<string> lastGamePlayers = context?.LoggedInPlayers
+                    .Where(x=>x.Team != HQMTeam.NoTeam)
+                    .Select(x=>x.Name) ?? new List<string>();
 
                 context = new GameContext();
 

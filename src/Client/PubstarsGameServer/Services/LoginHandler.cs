@@ -56,7 +56,9 @@ namespace PubstarsGameServer.Services
             if (cmd.Args.Count() > 0)
             {
                 string name = cmd.Sender.Name;
-                if (m_Context.LoggedInPlayers.Select(x => x.Name).Contains(name))
+                if (m_Context.LoggedInPlayers
+                    .Select(x => x.Name)
+                    .Contains(name))
                 {
                     Chat.SendMessage(">> " + name + " is already logged in");
                     return;
@@ -82,7 +84,9 @@ namespace PubstarsGameServer.Services
                     m_Context.AddPlayer(result.RankedPlayer);
                 }
             }
-            m_LoginTasks = m_LoginTasks.Where(kvp => !kvp.Value.IsCompleted).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            m_LoginTasks = m_LoginTasks
+                .Where(kvp => !kvp.Value.IsCompleted)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         private void Info(Command cmd)

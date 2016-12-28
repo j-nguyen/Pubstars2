@@ -120,7 +120,9 @@ namespace PubstarsGameServer.GameStates
 
         double TotalRating(List<string> list)
         {        
-            return  m_Context.LoggedInPlayers.Where(x => list.Contains(x.Name)).Select(x => x.Rating).Sum();
+            return  m_Context.LoggedInPlayers
+                .Where(x => list.Contains(x.Name))
+                .Select(x => x.Rating).Sum();
         }
     }
 }
