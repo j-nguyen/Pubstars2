@@ -67,6 +67,7 @@ namespace PubstarsGameServer.Services
             if(m_Context.GetPlayer(timer.Leaver.Name) != null)
             {
                 //player rejoined
+                m_Context.AddPlayerToTeam(timer.Leaver.Name, timer.Leaver.TeamLeft);
                 m_Context.Leavers.Remove(timer.Leaver.Name);
                 if(m_LeaveTimers.Peek().Leaver.Name == timer.Leaver.Name)
                     m_LeaveTimers.Dequeue();

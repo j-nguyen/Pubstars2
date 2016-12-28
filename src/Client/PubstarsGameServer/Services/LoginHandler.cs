@@ -16,7 +16,7 @@ namespace PubstarsGameServer.Services
         private CommandListener m_CommandListener;        
         private GameContext m_Context;
 
-        private List<Task<UserData.LoginResult>> m_LoginTasks;
+        private Dictionary<string, Task<UserData.LoginResult>> m_LoginTasks;
 
         public LoginHandler(GameContext context, CommandListener cmdListener)
         {
@@ -25,7 +25,7 @@ namespace PubstarsGameServer.Services
             m_UserData = new UserData();
             
 
-            m_LoginTasks = new List<Task<UserData.LoginResult>>();          
+            m_LoginTasks = new Dictionary<string, Task<UserData.LoginResult>>();          
         }
 
         public async Task Init()
@@ -55,20 +55,25 @@ namespace PubstarsGameServer.Services
         {
             if (cmd.Args.Count() > 0)
             {
-                if (m_Context.LoggedInPlayers.Select(x => x.Name).Contains(cmd.Sender.Name))
+                string name = cmd.Sender.Name;
+                if (m_Context.LoggedInPlayers.Select(x => x.Name).Contains(name))
                 {
-                    Chat.SendMessage(">> " + cmd.Sender.Name + " is already logged in");
+                    Chat.SendMessage(">> " + name + " is already logged in");
                     return;
                 }
-                string pw = cmd.Args[0];
-                
-                m_LoginTasks.Add( Task.Run(() => m_UserData.Login(cmd.Sender, pw)) );
+
+                string pw = cmd.Args[0];                
+                if(!m_LoginTasks.ContainsKey(name))
+                {
+                    m_LoginTasks.Add(name, Task.Run(() => m_UserData.Login(cmd.Sender, pw)));
+                }             
+                else Chat.SendMessage(">> " + name + " - Login already in progress.");
             }
         }
 
         private void ResolveLoginTasks()
         {
-            foreach (Task<UserData.LoginResult> t in m_LoginTasks.Where(x => x.IsCompleted))
+            foreach (Task<UserData.LoginResult> t in m_LoginTasks.Values.Where(x => x.IsCompleted))
             {
                 UserData.LoginResult result = t.Result;
                 Chat.SendMessage(">> " + result.Result);
@@ -77,7 +82,7 @@ namespace PubstarsGameServer.Services
                     m_Context.AddPlayer(result.RankedPlayer);
                 }
             }
-            m_LoginTasks.RemoveAll(x => x.IsCompleted);
+            m_LoginTasks = m_LoginTasks.Where(kvp => !kvp.Value.IsCompleted).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         private void Info(Command cmd)

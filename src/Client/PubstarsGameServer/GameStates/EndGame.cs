@@ -23,7 +23,7 @@ namespace PubstarsGameServer.GameStates
         public Task<bool> Execute()
         {
             Console.WriteLine("EndGame - Execute");
-            return Task.FromResult<bool>(true);
+            return Task.FromResult<bool>(!GameInfo.IsGameOver);
         }
 
         public async Task OnEnter()
