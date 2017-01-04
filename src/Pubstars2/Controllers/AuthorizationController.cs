@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict;
 
-using Microsoft.AspNetCore.Cors;
 using Pubstars2.Models;
 using AspNet.Security.OpenIdConnect.Primitives;
+using OpenIddict.Core;
+using OpenIddict.Models;
 
 namespace Pubstars2
 {

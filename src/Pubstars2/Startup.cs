@@ -32,7 +32,11 @@ namespace Pubstars2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseOpenIddict();
+            });
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>( o=>
                 {
@@ -47,7 +51,8 @@ namespace Pubstars2
                 .AddDefaultTokenProviders();
 
             // Register the OpenIddict services, including the default Entity Framework stores.
-            services.AddOpenIddict<ApplicationDbContext>()
+            services.AddOpenIddict()
+                .AddEntityFrameworkCoreStores<ApplicationDbContext>()
                 // Register the ASP.NET Core MVC binder used by OpenIddict.
                 // Note: if you don't call this method, you won't be able to
                 // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
