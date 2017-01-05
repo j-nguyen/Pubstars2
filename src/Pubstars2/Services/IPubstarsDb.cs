@@ -22,6 +22,7 @@ namespace Pubstars2.Data
         Task<UserData> GetUserData(string name);
 
         void AddGame(Game game);
+        void Remove(object entity);
         void SaveChanges();
     }
 }

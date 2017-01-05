@@ -33,7 +33,7 @@ namespace Pubstars2
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
                 options.UseOpenIddict();
             });
 

@@ -13,14 +13,14 @@ namespace Pubstars2.Services
 {
     public class PubstarsSeeder
     {
-        UserManager<ApplicationUser> _db;
+        UserManager<ApplicationUser> _um;
         RoleManager<IdentityRole> _rm;
         IConfiguration _config;
        
 
         public PubstarsSeeder(UserManager<ApplicationUser> db, IConfiguration config, RoleManager<IdentityRole> rm) 
         {
-            _db = db;
+            _um = db;
             _config = config;
             _rm = rm;
         }
@@ -37,8 +37,8 @@ namespace Pubstars2.Services
                     PubstarsPassword = "test",
                     PlayerStats = new Player() { Name = name }
                 };
-                if (!_db.Users.Contains(user))
-                    await _db.CreateAsync(user);                
+                if (!_um.Users.Contains(user))
+                    await _um.CreateAsync(user);                
             }
             await CreateClientUser();
         }
@@ -56,10 +56,10 @@ namespace Pubstars2.Services
             {
                 UserName = name 
             };
-            if(await _db.FindByNameAsync(name) == null)
+            if(await _um.FindByNameAsync(name) == null)
             {
-                await _db.CreateAsync(client, pw);
-                await _db.AddToRoleAsync(client, role.Name);
+                await _um.CreateAsync(client, pw);
+                await _um.AddToRoleAsync(client, role.Name);
             }
            
         }

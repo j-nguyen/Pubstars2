@@ -102,5 +102,10 @@ namespace Pubstars2.Data
                 .Include(x => x.PlayerStats)
                 .ThenInclude(x => x.Rating);
         }
+
+        public void Remove(object entity)
+        {
+            _db.Remove(entity);
+        }
     }
 }
