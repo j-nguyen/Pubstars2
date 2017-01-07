@@ -3,6 +3,7 @@ using PubstarsGameServer.Data;
 using PubstarsGameServer.GameStates;
 using PubstarsGameServer.Model;
 using PubstarsGameServer.Services;
+using PubstarsGameServer.Services.Substitutions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace PubstarsGameServer
                 Warden warden = new Warden(context);
                 CommandListener commandListener = new CommandListener();
                 LoginHandler loginHandler = new LoginHandler(context, commandListener);
-                SubHandler subHandler = new SubHandler(context, commandListener);
+                SubstitutionHandler subHandler = new SubstitutionHandler(context, commandListener);
                 
                 loginHandler.Init().Wait();
     

@@ -92,6 +92,7 @@ namespace PubstarsGameServer.Services
         private void Info(Command cmd)
         {
             Chat.SendMessage(">> "+ m_Context.LoggedInPlayers.Count() + " players logged in.");
+            Chat.SendMessage(">> Type '/join password' to login. ");
         }
 
       

@@ -60,7 +60,7 @@ namespace PubstarsGameServer.GameStates
             if(m_Context.LoggedInPlayers.Count < Settings.MIN_PLAYERS && m_MinPlayersReached)
             {
                 Console.WriteLine("WaitingForPlayers: Not enough players. Aborting game.");
-                Chat.SendMessage("Not enough players. Aborting game.");
+                Chat.SendMessage(">> Not enough players. Aborting game.");
                 m_Warden.Stop();
                 m_MinPlayersReached = false;
                 m_MinPlayersReachedTime = DateTime.MaxValue;

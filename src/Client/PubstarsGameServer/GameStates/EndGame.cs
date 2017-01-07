@@ -22,7 +22,7 @@ namespace PubstarsGameServer.GameStates
         }
         public Task<bool> Execute()
         {
-            Console.WriteLine("EndGame - Execute");
+            //wait for game to be over
             return Task.FromResult<bool>(!GameInfo.IsGameOver);
         }
 
@@ -52,7 +52,7 @@ namespace PubstarsGameServer.GameStates
                 Date = DateTime.UtcNow
             };
             
-            Chat.SendMessage("Game over. Stats have been Recorded.");
+            Chat.SendMessage(">> Game over. Stats have been Recorded.");
             m_Warden.Stop();
 
             if (!await RemoteApi.SendGameResult(report))
