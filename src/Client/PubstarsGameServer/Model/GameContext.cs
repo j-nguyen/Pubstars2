@@ -2,15 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PubstarsGameServer.Model
 {
     class GameContext
     {
         public IReadOnlyList<RankedPlayer> LoggedInPlayers { get { return m_LoggedInPlayers.Values.ToList(); } }
-
 
         public List<string> Leavers = new List<string>();
 
@@ -72,6 +69,6 @@ namespace PubstarsGameServer.Model
         public bool IsPlaying(RankedPlayer p)
         {
             return p.Team != HQMTeam.NoTeam;
-        }
+        }        
     }
 }
