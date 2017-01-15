@@ -12,18 +12,19 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Pubstars2.Controllers
 {
-    [Authorize(Roles ="admin")]
     public class AdminController : Controller
     {
         IPubstarsDb _db;
         RoleManager<IdentityRole> _rm;
         UserManager<ApplicationUser> _um;
+        ApplicationDbContext _ctx;
 
-        public AdminController(IPubstarsDb db, RoleManager<IdentityRole> rm, UserManager<ApplicationUser> um)
+        public AdminController(IPubstarsDb db, RoleManager<IdentityRole> rm, UserManager<ApplicationUser> um, ApplicationDbContext ctx)
         {
             _db = db;
             _rm = rm;
             _um = um;
+            _ctx = ctx;
         }
 
         public IActionResult Index()
@@ -31,17 +32,25 @@ namespace Pubstars2.Controllers
             return View();
         }
 
-        private void ResetRankings()
+        private void ResetSeason()
         {
-            Rating def = new Rating()
-            {
-                Mean = Moserware.Skills.GameInfo.DefaultGameInfo.DefaultRating.Mean,
-                StandardDeviation = Moserware.Skills.GameInfo.DefaultGameInfo.DefaultRating.StandardDeviation
-            };
-            
-            foreach(ApplicationUser p in _db.UsersWithPlayer())
-            {
-                p.PlayerStats.Rating = def;
+            DeleteAllGames();
+            ResetRankings();
+        }
+
+        private void DeleteAllGames()
+        {
+            var games = _ctx.Games.AsEnumerable();
+            _ctx.Games.RemoveRange(games);
+            _ctx.SaveChanges();
+        }
+
+        private void ResetRankings()
+        {            
+            foreach(Rating t in _ctx.Rating)
+            {              
+                t.Mean = Moserware.Skills.GameInfo.DefaultGameInfo.DefaultRating.Mean;
+                t.StandardDeviation = Moserware.Skills.GameInfo.DefaultGameInfo.DefaultRating.StandardDeviation;           
             }
             _db.SaveChanges();
         }
