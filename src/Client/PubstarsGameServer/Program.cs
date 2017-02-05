@@ -3,6 +3,7 @@ using PubstarsGameServer.Data;
 using PubstarsGameServer.GameStates;
 using PubstarsGameServer.Model;
 using PubstarsGameServer.Services;
+using PubstarsGameServer.Services.Logging;
 using PubstarsGameServer.Services.Substitutions;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,11 @@ namespace PubstarsGameServer
             Settings.InitDefaults();
             GameContext context = null;
             StateMachine sm = new StateMachine();
-            
+
+            LoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddProvider(new ConsoleLogger());
+            loggerFactory.AddProvider(new FileLogger());
+
             sm.Init(new Init()).Wait();
           
             while (true)

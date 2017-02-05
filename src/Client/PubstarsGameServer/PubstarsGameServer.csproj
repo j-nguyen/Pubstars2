@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\HQMRanked2\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.2\lib\net452\RestSharp.dll</HintPath>
@@ -51,6 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Settings.cs" />
+    <Compile Include="Services\Logging\ConsoleLogger.cs" />
+    <Compile Include="Services\Logging\FileLogger.cs" />
+    <Compile Include="Services\Logging\ILoggerProvider.cs" />
+    <Compile Include="Services\Logging\Logger.cs" />
+    <Compile Include="Services\Logging\LoggerFactory.cs" />
     <Compile Include="Services\LoginHandler.cs" />
     <Compile Include="Services\Substitutions\Leaver.cs" />
     <Compile Include="Services\Substitutions\LeaveTimer.cs" />
